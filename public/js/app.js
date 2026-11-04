@@ -90,6 +90,15 @@ class AppUI {
       this.openCookbookModal();
     });
 
+    // Botón Flotante para Ocultar/Mostrar Menú en Celular
+    const btnToggleMobileHud = document.getElementById("btn-toggle-mobile-hud");
+    if (btnToggleMobileHud) {
+      btnToggleMobileHud.addEventListener("click", (e) => {
+        e.stopPropagation();
+        this.toggleMobileHud();
+      });
+    }
+
     // Botón Compartir / Celular QR
     document.getElementById("btn-mobile-qr").addEventListener("click", () => {
       this.openQrModal();
@@ -583,6 +592,25 @@ class AppUI {
       a.click();
       if (window.soundFX) window.soundFX.playFanfare();
     };
+  }
+
+  toggleMobileHud(forceHide = null) {
+    if (forceHide === true) {
+      document.body.classList.add("hud-hidden");
+    } else if (forceHide === false) {
+      document.body.classList.remove("hud-hidden");
+    } else {
+      document.body.classList.toggle("hud-hidden");
+    }
+
+    const btn = document.getElementById("btn-toggle-mobile-hud");
+    if (btn) {
+      const isHidden = document.body.classList.contains("hud-hidden");
+      const icon = btn.querySelector(".hud-toggle-icon");
+      const label = btn.querySelector(".hud-toggle-label");
+      if (icon) icon.innerText = isHidden ? "☰" : "✕";
+      if (label) label.innerText = isHidden ? "Menú" : "Ocultar";
+    }
   }
 
   closeAllModals() {

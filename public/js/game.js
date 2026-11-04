@@ -9,6 +9,10 @@ class OfficeGame {
     // Medidas base virtuales del mapa
     this.virtualWidth = 960;
     this.virtualHeight = 600;
+    this.scaleX = 1;
+    this.scaleY = 1;
+    this.offsetX = 0;
+    this.offsetY = 0;
 
     // Identidad del Jugador Local
     this.playerId = localStorage.getItem("jueguia_player_id") || "p_" + Math.random().toString(36).substr(2, 9);
@@ -86,12 +90,23 @@ class OfficeGame {
   resizeCanvas() {
     const container = this.canvas.parentElement;
     const rect = container.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     this.canvas.width = rect.width * dpr;
     this.canvas.height = rect.height * dpr;
-    this.scaleX = (rect.width * dpr) / this.virtualWidth;
-    this.scaleY = (rect.height * dpr) / this.virtualHeight;
+
+    // En pantallas verticales (móviles), escala uniforme manteniendo el aspecto sin deformar
+    if (rect.height > rect.width) {
+      this.scaleX = (rect.width * dpr) / this.virtualWidth;
+      this.scaleY = this.scaleX;
+      this.offsetX = 0;
+      this.offsetY = Math.max(0, ((rect.height * dpr) - (this.virtualHeight * this.scaleY)) / 2);
+    } else {
+      this.scaleX = (rect.width * dpr) / this.virtualWidth;
+      this.scaleY = (rect.height * dpr) / this.virtualHeight;
+      this.offsetX = 0;
+      this.offsetY = 0;
+    }
   }
 
   initMap() {
@@ -299,6 +314,14 @@ class OfficeGame {
         this.triggerInteraction();
       });
     }
+
+    // Tocar el canvas en móvil para ocultar o mostrar la barra superior / menú
+    this.canvas.addEventListener("click", () => {
+      if (this.activeModal) return;
+      if (window.innerWidth <= 860 && window.appUI) {
+        window.appUI.toggleMobileHud();
+      }
+    });
   }
 
   bindTouchControl(elementId, direction) {
@@ -308,6 +331,10 @@ class OfficeGame {
     const startHandler = e => {
       e.preventDefault();
       this.keys[direction] = true;
+      // Al empezar a moverse en celular, ocultar la barra superior automáticamente para despejar el tablero
+      if (window.innerWidth <= 860 && window.appUI) {
+        window.appUI.toggleMobileHud(true);
+      }
       if (window.soundFX) window.soundFX.playStep();
     };
 
@@ -612,6 +639,7 @@ class OfficeGame {
   render() {
     const ctx = this.ctx;
     ctx.save();
+    ctx.translate(this.offsetX || 0, this.offsetY || 0);
     ctx.scale(this.scaleX, this.scaleY);
 
     // 1. Piso

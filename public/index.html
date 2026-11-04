@@ -9,6 +9,21 @@
 </head>
 <body>
 
+  <!-- Pantalla de Bloqueo / Advertencia de Orientación Móvil -->
+  <div id="rotate-device-overlay" class="rotate-overlay">
+    <div class="rotate-card">
+      <div class="rotate-phone-icon">📲</div>
+      <h2>Por favor coloca tu teléfono en vertical</h2>
+      <p>Para moverte libremente en el tablero de Gestión de Ingresos y disfrutar del juego sin estorbos.</p>
+      <span class="rotate-hint">Gira tu teléfono a la posición vertical</span>
+    </div>
+  </div>
+
+  <!-- Botón Flotante para Ocultar/Mostrar Menú en Celular -->
+  <button id="btn-toggle-mobile-hud" class="floating-mobile-hud-btn" aria-label="Mostrar o Ocultar Menú">
+    <span class="hud-toggle-icon">☰</span> <span class="hud-toggle-label">Menú</span>
+  </button>
+
   <!-- Barra Superior / HUD Principal -->
   <header class="top-navbar">
     <div class="brand-section">
@@ -95,6 +110,21 @@
   <main class="main-game-layout">
     <div class="game-screen-wrapper">
       <canvas id="game-canvas"></canvas>
+
+      <!-- Controles Táctiles Flotantes para Celulares (D-Pad y Acción A) -->
+      <div class="touch-controls-container">
+        <div class="dpad">
+          <button id="btn-up" class="dpad-btn" aria-label="Arriba">▲</button>
+          <button id="btn-down" class="dpad-btn" aria-label="Abajo">▼</button>
+          <button id="btn-left" class="dpad-btn" aria-label="Izquierda">◀</button>
+          <button id="btn-right" class="dpad-btn" aria-label="Derecha">▶</button>
+        </div>
+
+        <div class="touch-action-panel">
+          <button id="btn-action" class="action-btn-circle" aria-label="Acción / Interactuar">A</button>
+          <span class="action-label">INTERACTUAR</span>
+        </div>
+      </div>
     </div>
 
     <!-- Indicador de Controles en PC -->
@@ -102,21 +132,6 @@
       <span>Moverse: <span class="kbd">↑</span> <span class="kbd">↓</span> <span class="kbd">←</span> <span class="kbd">→</span> o <span class="kbd">W A S D</span></span>
       <span>Interactuar: <span class="kbd">ESPACIO</span> o <span class="kbd">ENTER</span></span>
       <span>Cerrar Ventana: <span class="kbd">ESC</span></span>
-    </div>
-
-    <!-- Controles Táctiles para Celulares / Pantallas Táctiles -->
-    <div class="touch-controls-container">
-      <div class="dpad">
-        <button id="btn-up" class="dpad-btn" aria-label="Arriba">▲</button>
-        <button id="btn-down" class="dpad-btn" aria-label="Abajo">▼</button>
-        <button id="btn-left" class="dpad-btn" aria-label="Izquierda">◀</button>
-        <button id="btn-right" class="dpad-btn" aria-label="Derecha">▶</button>
-      </div>
-
-      <div class="touch-action-panel">
-        <button id="btn-action" class="action-btn-circle" aria-label="Acción / Interactuar">A</button>
-        <span class="action-label">INTERACTUAR</span>
-      </div>
     </div>
   </main>
 
