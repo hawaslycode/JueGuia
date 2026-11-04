@@ -217,7 +217,7 @@ class AppUI {
       const area = areaSelect.value;
 
       if (!name) {
-        alert("Por favor ingresa tu nombre para que tus compañeros te reconozcan en la mesa.");
+        alert("Hágame el favor y poné tu nombre pa' que el combo te reconozca en la mesa.");
         return;
       }
 
@@ -326,10 +326,11 @@ class AppUI {
 
     document.getElementById("live-mms-counter").innerText = `${tokens} M&Ms`;
 
-    const hasRol = /actúa como|eres un|como especialista|como auditor|como contador|como analista|asume el rol/i.test(text);
-    const hasContext = /ingreso|extracto|banco|factur|pago|cliente|retenci|cuenta|empresa|saldo/i.test(text);
-    const hasSteps = /paso|primero|luego|identifica|clasifica|compara|cruza|analiza|valida/i.test(text);
-    const hasFormat = /tabla|columna|formato|json|csv|lista|resumen|viñetas|encabezado|correo/i.test(text);
+    const plain = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const hasRol = /actua como|eres un|sos un|como especialista|como auditor|como contador|como analista|asume el rol|asumi el rol/i.test(plain);
+    const hasContext = /ingreso|extracto|banco|factur|pago|cliente|retenci|cuenta|empresa|saldo/i.test(plain);
+    const hasSteps = /paso|primero|luego|identific|clasific|compar|cruz|analiz|valid/i.test(plain);
+    const hasFormat = /tabla|columna|formato|json|csv|lista|resumen|vinetas|encabezado|correo/i.test(plain);
 
     this.setIngredientBadge("ing-rol", hasRol);
     this.setIngredientBadge("ing-context", hasContext);
@@ -342,10 +343,10 @@ class AppUI {
     if (!el) return;
     if (present) {
       el.classList.add("checked");
-      el.querySelector(".badge-status").innerText = "Listo";
+      el.querySelector(".badge-status").innerText = "¡Listo!";
     } else {
       el.classList.remove("checked");
-      el.querySelector(".badge-status").innerText = "Pendiente";
+      el.querySelector(".badge-status").innerText = "Falta";
     }
   }
 
@@ -354,7 +355,7 @@ class AppUI {
 
     const promptText = document.getElementById("player-prompt-input").value;
     if (!promptText || promptText.trim().length < 10) {
-      alert("Por favor escribe un prompt con al menos una instrucción clara antes de enviar.");
+      alert("Ey, escribí un prompt con al menos una instrucción clarita antes de mandarlo, pues.");
       return;
     }
 
@@ -385,7 +386,7 @@ class AppUI {
       this.displayEvaluationResult(data, level, promptText);
     } catch (err) {
       console.error("Error evaluando prompt:", err);
-      alert("Ocurrió un error al procesar el prompt. Intenta de nuevo.");
+      alert("Uy, se nos enredó el prompt. Intentá otra vez.");
     } finally {
       this.isEvaluating = false;
       submitBtn.innerHTML = originalText;
@@ -540,7 +541,7 @@ class AppUI {
     document.getElementById("btn-save-key").onclick = async () => {
       const newKey = keyInput.value.trim();
       if (!newKey) {
-        alert("Por favor ingresa una API Key.");
+        alert("Poné una API Key, pues.");
         return;
       }
 
@@ -559,14 +560,14 @@ class AppUI {
         if (res.ok) {
           this.geminiApiKey = newKey;
           localStorage.setItem("jueguia_user_api_key", newKey);
-          alert("🎉 ¡Conexión exitosa con Gemini 3.8 Flash!");
+          alert("🎉 ¡Eso! Quedó conectado con Gemini 3.8 Flash.");
           this.fetchNetworkInfo();
           this.closeAllModals();
         } else {
-          alert("❌ " + (data.error || "No se pudo validar la clave."));
+          alert("❌ " + (data.error || "No se pudo validar la clave, parce."));
         }
       } catch (e) {
-        alert("Error de conexión al servidor.");
+        alert("Uy, no se pudo conectar con el servidor.");
       } finally {
         saveBtn.innerText = "Guardar y Conectar";
         saveBtn.disabled = false;

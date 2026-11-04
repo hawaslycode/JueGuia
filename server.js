@@ -13,14 +13,13 @@ app.use(cors());
 app.use(express.json({ limit: "5mb" }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// Clave de API de Google Gemini por defecto para el proyecto
-const DEFAULT_GEMINI_KEY = Buffer.from(
-  "QVEuQWI4Uk42SVBSZUFJZ0I3RFUzWFJuSEhLWGZOVEoxMmlXUHRjSy03bGVJMmRUMllMbkE=",
-  "base64"
-).toString("utf-8");
+// Clave de API de Google Gemini: se lee SOLO de la variable de entorno GEMINI_API_KEY
+// (archivo .env en tu PC, o "Environment" en Render). Nunca la escribas en el código.
+const SERVER_KEY_LOCKED = Boolean(process.env.GEMINI_API_KEY);
+let runtimeApiKey = process.env.GEMINI_API_KEY || "";
 
-// Cache current active API key in memory if updated from UI
-let runtimeApiKey = process.env.GEMINI_API_KEY || DEFAULT_GEMINI_KEY;
+// URL pública cuando el juego está desplegado (Render la define sola; o poné PUBLIC_URL)
+const PUBLIC_URL = process.env.PUBLIC_URL || process.env.RENDER_EXTERNAL_URL || "";
 
 // Active players registry for real-time presence (PC & Mobile sync)
 const activePlayers = new Map();
@@ -52,7 +51,7 @@ function getLocalIpAddress() {
 app.get("/api/network-info", async (req, res) => {
   try {
     const localIp = getLocalIpAddress();
-    const url = `http://${localIp}:${PORT}`;
+    const url = PUBLIC_URL || `http://${localIp}:${PORT}`;
     const qrCodeDataUrl = await QRCode.toDataURL(url, {
       margin: 2,
       width: 256,
@@ -101,7 +100,8 @@ app.post("/api/configure-key", async (req, res) => {
       });
     }
 
-    runtimeApiKey = apiKey.trim();
+    // Si el servidor ya tiene su clave fija (Render/.env), un jugador no puede reemplazarla para todos
+    if (!SERVER_KEY_LOCKED) runtimeApiKey = apiKey.trim();
     res.json({
       success: true,
       message: `¡Conexión con Gemini (${modelUsed}) exitosa!`,
@@ -179,6 +179,7 @@ app.post("/api/evaluate-prompt", async (req, res) => {
     const systemInstruction = `
 Eres el "Gran Maestro Masmelo", un mentor experto en Inteligencia Artificial y Gestión de Ingresos (Revenue Management, Facturación, Recaudo, Conciliaciones Bancarias y ERPs como SAP/Siigo/Oracle).
 Tu labor es entrenar con mucho humor y pedagogía al equipo de Gestión de Ingresos para que dominen Claude AI.
+IMPORTANTE: Todos tus comentarios (detodito_breakdown, token_verdict, humor_feedback, pro_tip, snack_reward_message) deben estar escritos en español paisa de Medellín: usá el voseo (vos, mirá, hacé), y expresiones como "pues", "parce", "mijo/mija", "¡Ave María!", "qué berraquera", "una nota", "qué pereza". Sé cortico y directo (máximo 2 frases por comentario). Nada de groserías. La claude_simulation sí debe ser profesional.
 
 El juego utiliza una metáfora de snacks:
 - MASMELO: Representa a Claude (flexible, suave, pero si le das un prompt malo se quema y alucina pagos inexistentes).
@@ -217,15 +218,15 @@ Devuelve un JSON con exactamente esta estructura:
   "score": number (0-100),
   "approved": boolean (true si score >= 70),
   "detodito_breakdown": {
-    "rol": { "included": boolean, "comment": "explicación corta y graciosa" },
-    "contexto": { "included": boolean, "comment": "explicación corta y graciosa" },
-    "instrucciones": { "included": boolean, "comment": "explicación corta y graciosa" },
-    "formato": { "included": boolean, "comment": "explicación corta y graciosa" }
+    "rol": { "included": boolean, "comment": "explicación cortica y graciosa en paisa" },
+    "contexto": { "included": boolean, "comment": "explicación cortica y graciosa en paisa" },
+    "instrucciones": { "included": boolean, "comment": "explicación cortica y graciosa en paisa" },
+    "formato": { "included": boolean, "comment": "explicación cortica y graciosa en paisa" }
   },
   "mms_spent": ${estimatedTokens},
   "token_verdict": "string (comentario sobre si ahorró M&Ms o desperdició en rodeos)",
   "claude_simulation": "string (la respuesta exacta y detallada que daría Claude a este prompt)",
-  "humor_feedback": "string (comentario divertido de oficina colombiana/latina sobre el cierre de mes, café, conciliación y los snacks)",
+  "humor_feedback": "string (comentario divertido de oficina paisa sobre el cierre de mes, café, conciliación y los snacks)",
   "pro_tip": "string (un consejo profesional de alto valor aplicable hoy mismo en Claude para Gestión de Ingresos)",
   "snack_reward_message": "string (frase para reclamar el snack físico si aprobó, o mensaje de consuelo)"
 }
@@ -304,10 +305,11 @@ function generateSmartMockEvaluation(levelId, levelTitle, scenarioContext, promp
   const lower = prompt.toLowerCase();
 
   // Ingredient detection
-  const hasRol = /actúa como|eres un|como especialista|como auditor|como contador|como analista|asume el rol/i.test(prompt);
-  const hasContext = /ingreso|extracto|banco|factur|pago|cliente|retenci|cuenta|empresa|saldo/i.test(prompt);
-  const hasSteps = /paso|primero|luego|identifica|clasifica|compara|cruza|analiza|valida/i.test(prompt);
-  const hasFormat = /tabla|columna|formato|json|csv|lista|resumen|viñetas|encabezado|correo/i.test(prompt);
+  const plain = prompt.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const hasRol = /actua como|eres un|sos un|como especialista|como auditor|como contador|como analista|asume el rol|asumi el rol/i.test(plain);
+  const hasContext = /ingreso|extracto|banco|factur|pago|cliente|retenci|cuenta|empresa|saldo/i.test(plain);
+  const hasSteps = /paso|primero|luego|identific|clasific|compar|cruz|analiz|valid/i.test(plain);
+  const hasFormat = /tabla|columna|formato|json|csv|lista|resumen|vinetas|encabezado|correo/i.test(plain);
 
   let score = 40;
   if (hasRol) score += 15;
@@ -332,39 +334,39 @@ function generateSmartMockEvaluation(levelId, levelTitle, scenarioContext, promp
       rol: {
         included: hasRol,
         comment: hasRol
-          ? "🥔 ¡Plátano crujiente! Le diste a Claude un rol experto claro."
-          : "🥔 Te faltó el Plátano: no le dijiste a Claude quién debe ser (ej: 'Actúa como Auditor Senior de Ingresos').",
+          ? "🥔 ¡Eso, plátano crujiente! Le diste a Claude un rol bien clarito."
+          : "🥔 Te faltó el Plátano, mijo: no le dijiste a Claude quién es (ej: 'Actuá como analista de Ingresos').",
       },
       contexto: {
         included: hasContext,
         comment: hasContext
-          ? "🥓 ¡Chicharrón carnoso! El contexto de negocio y las cuentas están presentes."
-          : "🥓 Te faltó el Chicharrón: Claude necesita saber si es banco, ERP, qué impuestos aplican o qué moneda es.",
+          ? "🥓 ¡Chicharrón carnudo! Le diste el contexto del negocio, pues."
+          : "🥓 Te faltó el Chicharrón: Claude no sabe si es banco, ERP o qué impuestos aplican.",
       },
       instrucciones: {
         included: hasSteps,
         comment: hasSteps
-          ? "🍟 ¡Margarita suavecita! Le diste pasos ordenados para procesar la información."
-          : "🍟 Te faltó la Margarita: da instrucciones paso 1, paso 2 y paso 3 para evitar que alucine.",
+          ? "🍟 ¡Margarita suavecita! Le diste los pasos en orden, una nota."
+          : "🍟 Te faltó la Margarita: dale paso 1, paso 2 y paso 3 pa' que no se invente nada.",
       },
       formato: {
         included: hasFormat,
         comment: hasFormat
-          ? "🌶️ ¡Tostacos picantes! Especificaste el formato de salida exacto."
-          : "🌶️ Te faltaron los Tostacos: si no pides una tabla o formato específico, Claude te escribe un ensayo bíblico.",
+          ? "🌶️ ¡Tostacos picantes! Le dijiste el formato exacto, bien pueda."
+          : "🌶️ Te faltaron los Tostacos: si no le pedís tabla o formato, Claude te escribe la Biblia en verso.",
       },
     },
     token_verdict: tokens < 90
-      ? `🟢 ¡Dieta de M&Ms perfecta! Gastaste solo ${tokens} M&Ms sin rodeos innecesarios.`
-      : `🟡 Gastaste ${tokens} M&Ms. Recuerda que cada palabra de cortesía ('Estimado Claude por favor sea tan amable') cuesta M&Ms de la bolsa.`,
+      ? `🟢 ¡Qué dieta tan berraca! Gastaste solo ${tokens} M&Ms sin carreta.`
+      : `🟡 Gastaste ${tokens} M&Ms. Acordate que cada saludito ('Estimado Claude, tan amable...') se come M&Ms de la bolsa.`,
     claude_simulation: generateMockClaudeResponse(levelId, prompt, approved),
     humor_feedback: approved
-      ? "🎉 ¡Excelente jugada! Hasta Don Saldo soltó una lágrima de felicidad en su oficina y se salvó el cierre de mes."
-      : "😅 Casi casi... Tu Masmelo quedó un poco ahumado porque le faltaron instrucciones claras. ¡Ajusta los ingredientes del DeTodito!",
+      ? "🎉 ¡Ave María, qué berraquera! Hasta Mario soltó la lagrimita y se salvó el cierre de mes."
+      : "😅 Casi, casi, mijo... El Masmelo quedó medio quemado por falta de instrucciones. ¡Acomodá los ingredientes del DeTodito!",
     pro_tip: getLevelProTip(levelId),
     snack_reward_message: approved
-      ? "🎁 ¡Nivel Superado! Pasa a la mesa y reclama tus M&Ms y tu pedazo de DeTodito antes de que se acaben."
-      : "💡 Revisa las recomendaciones del DeTodito e intenta de nuevo para desbloquear tu snack.",
+      ? "🎁 ¡Pasaste el nivel! Arrimá a la mesa y reclamá tus M&Ms y tu DeTodito antes de que se los coman."
+      : "💡 Mirá las recomendaciones del DeTodito e intentalo otra vez pa' ganarte el mecato.",
   };
 }
 
@@ -466,15 +468,15 @@ flowchart LR
 
 function getLevelProTip(levelId) {
   const tips = {
-    1: "Pro-Tip: Si guardas el Rol y el Contexto en los 'Custom Instructions' o 'Projects' de Claude, no tienes que volver a escribirlos nunca más.",
-    2: "Pro-Tip: En lugar de pegar tablas con 20 columnas de Excel, copia solo las columnas clave separadas por comas (CSV). Tu consumo de M&Ms caerá en un 70%.",
-    3: "Pro-Tip: Para cruces de tablas de más de 200 filas, pídele a Claude que use 'Artifacts' (Artefactos) para crear una tabla interactiva con buscador y filtros.",
-    4: "Pro-Tip: Pídele siempre a Claude: 'Si un pago no coincide exactamente, busca combinaciones de 2 o 3 facturas que sumadas den ese valor menos retenciones habituales (2.5%, 3.5%, 11.04 por mil)'.",
-    5: "Pro-Tip: Los Guardrails (reglas negativas como 'NUNCA inventes datos si no los ves en el texto') son el secreto para que la IA nunca alucine números falsos en contabilidad.",
-    6: "Pro-Tip: Pídele a Claude que catalogue los correos en 3 estados de urgencia: [VERDE: Pago al día], [AMARILLO: Falta certificado], [ROJO: Sin soporte de pago].",
-    7: "Pro-Tip: Conectando Google Drive a Claude (vía extensiones o conectores MCP), puedes pedirle: 'Revisa todos los PDFs de la carpeta Recaudos de hoy y dime cuáles no están en el Excel de facturación'.",
+    1: "Pro-Tip: Guardá el Rol y el Contexto en un Project de Claude y no los volvés a escribir nunca, pues.",
+    2: "Pro-Tip: En vez de pegar 20 columnas de Excel, pegá solo las clave en CSV. Te ahorrás como el 70% de M&Ms.",
+    3: "Pro-Tip: Pa' tablas de más de 200 filas, pedile a Claude un Artifact con buscador y filtros. ¡Una nota!",
+    4: "Pro-Tip: Decile a Claude: 'Si un pago no cuadra, probá sumando 2 o 3 facturas menos la retención (2.5%, 3.5%)'.",
+    5: "Pro-Tip: Los Guardrails ('NUNCA te inventés datos') son el secreto pa' que la IA no se saque números de la manga.",
+    6: "Pro-Tip: Pedile a Claude que clasifique los correos en semáforo: Verde (al día), Amarillo (falta soporte), Rojo (sin pago).",
+    7: "Pro-Tip: Con Drive conectado podés decirle: 'Revisá los PDFs de Recaudos de hoy y decime cuáles no están en el Excel'.",
   };
-  return tips[levelId] || "Pro-Tip: La claridad en las instrucciones siempre supera la longitud del prompt.";
+  return tips[levelId] || "Pro-Tip: Más vale clarito que largo, pues.";
 }
 
 // Start Server
@@ -482,8 +484,12 @@ app.listen(PORT, "0.0.0.0", () => {
   const localIp = getLocalIpAddress();
   console.log("==================================================================");
   console.log("🎮 JueGuIA: La Odisea de Gestión de Ingresos (Edición Snack-IA)");
-  console.log(`💻 En tu PC:     http://localhost:${PORT}`);
-  console.log(`📱 En tu Celular: http://${localIp}:${PORT}`);
+  if (PUBLIC_URL) {
+    console.log(`🌍 En internet:   ${PUBLIC_URL}`);
+  } else {
+    console.log(`💻 En tu PC:     http://localhost:${PORT}`);
+    console.log(`📱 En tu Celular: http://${localIp}:${PORT}`);
+  }
   console.log(`🔑 Estado API:   ${runtimeApiKey ? "Conectado a Gemini 3.8" : "Modo Local / API pendiente"}`);
   console.log("==================================================================");
 });

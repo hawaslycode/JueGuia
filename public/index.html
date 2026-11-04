@@ -13,9 +13,9 @@
   <div id="rotate-device-overlay" class="rotate-overlay">
     <div class="rotate-card">
       <div class="rotate-phone-icon">📱 ➔ 📲</div>
-      <h2>Por favor gira tu teléfono a modo horizontal</h2>
-      <p>Para disfrutar de la mejor experiencia panorámica estilo consola y moverte libremente en el tablero sin estorbos.</p>
-      <span class="rotate-hint">Gira tu teléfono hacia la posición horizontal 🔄</span>
+      <h2>Hágame el favor y voltiá el celular, pues</h2>
+      <p>Así se ve todo más bacano y te podés mover por la oficina sin enredos.</p>
+      <span class="rotate-hint">Ponelo acostadito 🔄</span>
     </div>
   </div>
 
@@ -141,12 +141,12 @@
   <div id="profile-modal" class="modal-backdrop">
     <div class="modal-window" style="max-width: 480px;">
       <div class="modal-header">
-        <h3 id="profile-modal-title">¡Bienvenido! Registra tu Jugador</h3>
+        <h3 id="profile-modal-title">¡Qué más pues! Registrate, parce</h3>
         <button class="modal-close-btn">&times;</button>
       </div>
       <div class="modal-scrollable-body">
         <p style="font-size: 0.9rem; color: #cbd5e1;">
-          Ingresa tus datos para que tus compañeros te vean sentado en la mesa de juego y en el tablero de avance:
+          Poné tus datos pa' que el combo te vea sentado en la mesa y en el tablero:
         </p>
 
         <div class="form-group-field">
@@ -170,11 +170,11 @@
         </div>
 
         <p style="font-size: 0.78rem; color: #94a3b8;">
-          * Tu avance de niveles y M&Ms ahorrados se sincronizarán en tiempo real con el resto del equipo.
+          * Tu avance y los M&Ms que ahorrés se ven en vivo con el resto del equipo.
         </p>
 
         <button id="btn-save-profile" class="nav-btn primary" style="justify-content: center; padding: 12px;">
-          Entrar al Cierre de Mes
+          ¡Hágale pues, al cierre de mes!
         </button>
       </div>
     </div>
@@ -191,7 +191,7 @@
       </div>
       <div class="modal-scrollable-body">
         <p style="font-size: 0.9rem; color: #94a3b8;">
-          Aquí puedes ver a todos los compañeros que están en la sala jugando desde sus computadores o celulares, su área y el piso que van superando:
+          Aquí ves a todo el combo que está jugando desde el computador o el celular, su área y el piso en el que van:
         </p>
 
         <div id="teammates-cards-container" class="teammates-grid"></div>
@@ -210,7 +210,7 @@
       </div>
       <div class="modal-scrollable-body">
         <p style="font-size: 0.88rem; color: #cbd5e1;">
-          Copia este prompt maestro y pégalo en Google Gemini, Claude o cualquier IA para reproducir exactamente la misma arquitectura pedagógica de snacks, niveles contables, evaluador con Gemini 3.8 y modo móvil:
+          Copiá este prompt maestro y pegalo en Claude, Gemini o la IA que querás pa' armar el mismo juego:
         </p>
 
         <div style="display: flex; justify-content: flex-end;">
@@ -245,7 +245,7 @@
         </div>
 
         <div id="lvl-humor-intro" class="level-humor-quote">
-          Historia divertida sobre el cierre contable...
+          La historia del cierre de mes...
         </div>
 
         <div class="lesson-box">
@@ -253,51 +253,51 @@
         </div>
 
         <div class="case-data-box">
-          <h5 id="lvl-case-title">Datos Reales del Caso:</h5>
+          <h5 id="lvl-case-title">Los datos del caso:</h5>
           <pre id="lvl-case-data" class="case-data-text"></pre>
         </div>
 
         <div class="challenge-prompt-section">
           <div id="lvl-challenge-goal" class="challenge-goal-alert">
-            Escribe un prompt que le ordene a Claude procesar estos datos...
+            Escribí un prompt pa' que Claude procese estos datos...
           </div>
 
           <div class="detodito-live-checklist">
             <div id="ing-rol" class="ingredient-badge">
               <span><strong>Rol (Plátano)</strong></span>
-              <span class="badge-status">Pendiente</span>
+              <span class="badge-status">Falta</span>
             </div>
             <div id="ing-context" class="ingredient-badge">
               <span><strong>Contexto (Chicharrón)</strong></span>
-              <span class="badge-status">Pendiente</span>
+              <span class="badge-status">Falta</span>
             </div>
             <div id="ing-steps" class="ingredient-badge">
               <span><strong>Instrucciones (Margarita)</strong></span>
-              <span class="badge-status">Pendiente</span>
+              <span class="badge-status">Falta</span>
             </div>
             <div id="ing-format" class="ingredient-badge">
               <span><strong>Formato (Tostacos)</strong></span>
-              <span class="badge-status">Pendiente</span>
+              <span class="badge-status">Falta</span>
             </div>
           </div>
 
           <div class="prompt-editor-wrapper">
             <div class="editor-toolbar">
-              <span>✍️ Redacta tu Prompt para Claude:</span>
+              <span>✍️ Escribí tu prompt pa' Claude:</span>
               <span>Gasto estimado: <strong id="live-mms-counter" class="live-mms-counter">0 M&Ms</strong></span>
             </div>
             <textarea
               id="player-prompt-input"
               class="player-prompt-textarea"
-              placeholder="Escribe aquí tu prompt aplicando los ingredientes del DeTodito... (Ej: Actúa como especialista en gestión de ingresos...)"
+              placeholder="Escribí aquí tu prompt con los ingredientes del DeTodito... (Ej: Actuá como analista de gestión de ingresos...)"
             ></textarea>
 
             <div class="prompt-actions-row">
               <button id="btn-insert-template" class="btn-template">
-                💡 Insertar Plantilla Recomendada
+                💡 Mostrame la plantilla
               </button>
               <button id="btn-submit-prompt" class="btn-submit-eval">
-                🚀 Enviar a Claude (Evaluado por Gemini 3.8)
+                🚀 ¡Mandáselo a Claude, pues!
               </button>
             </div>
           </div>
@@ -314,14 +314,14 @@
           <div id="eval-detodito-feedback"></div>
 
           <div style="background: #1e1b4b; padding: 14px; border-radius: 8px; border-left: 4px solid #a855f7;">
-            <p style="font-size: 0.85rem; color: #e9d5ff;"><strong>Veredicto del Gran Maestro Masmelo:</strong></p>
+            <p style="font-size: 0.85rem; color: #e9d5ff;"><strong>Lo que dice el Gran Maestro Masmelo:</strong></p>
             <p id="eval-humor-quote" style="color: #f5d0fe; font-style: italic; margin-top: 4px;"></p>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 8px;">
             <p id="eval-token-verdict" style="font-size: 0.85rem; color: #fde047;"></p>
             <div class="pro-tip-box">
-              <strong>Consejo Ninja para el Trabajo:</strong>
+              <strong>El consejito pa'l camello:</strong>
               <p id="eval-pro-tip" style="margin-top: 4px;"></p>
             </div>
           </div>
@@ -330,7 +330,7 @@
         <!-- Simulación en Vivo de Claude -->
         <div id="claude-simulation-box" class="claude-simulation-box" style="display: none;">
           <div class="claude-sim-header">
-            <span>Respuesta Generada por Claude (Simulación en Vivo):</span>
+            <span>Lo que te respondería Claude:</span>
           </div>
           <div id="claude-simulation-content" class="claude-sim-pre"></div>
         </div>
@@ -350,12 +350,12 @@
       </div>
       <div class="modal-scrollable-body">
         <p style="font-size: 0.9rem; color: #94a3b8;">
-          Aquí tienes la biblioteca completa de prompts listos para copiar y usar en tu Claude del día a día (para conciliaciones, tablas, correos de cobranza y agentes).
+          Aquí tenés todos los prompts listos pa' copiar y usar en el camello de todos los días.
         </p>
 
         <div style="display: flex; gap: 10px; margin-bottom: 10px;">
           <button id="btn-download-cookbook" class="nav-btn primary">
-            📥 Descargar Recetario Completo (.MD)
+            📥 Bajate el Recetario (.MD)
           </button>
         </div>
 
@@ -382,7 +382,7 @@
             </div>
             <strong style="color: #fbcfe8; font-size: 0.85rem; display: block; margin-top: 4px;">Representa: El Modelo de IA (Claude)</strong>
             <p style="font-size: 0.85rem; color: #e2e8f0; margin-top: 8px;">
-              Es suave, dulce y flexible. Se amolda a cualquier tarea. Pero si le metes fuego directo con un prompt vago de 3 palabras, <strong>se quema por fuera, queda crudo por dentro y alucina pagos que no existen</strong>.
+              Suavecito y se acomoda a todo. Pero si le metés candela con un prompt flojo de 3 palabras, <strong>se quema por fuera, queda crudo por dentro y se inventa pagos, ¡Ave María!</strong>.
             </p>
           </div>
 
@@ -393,7 +393,7 @@
             </div>
             <strong style="color: #fde68a; font-size: 0.85rem; display: block; margin-top: 4px;">Representa: Los Tokens y Memoria</strong>
             <p style="font-size: 0.85rem; color: #e2e8f0; margin-top: 8px;">
-              Cada sílaba, número y fila vacía de Excel le cuesta M&Ms a la bolsa. Ahorra M&Ms limpiando columnas inútiles, usando CSV y evitando saludos ceremoniales eternos.
+              Cada palabra y fila vacía del Excel cuesta M&Ms. Ahorrá limpiando columnas, usando CSV y sin tanta carreta.
             </p>
           </div>
 
@@ -415,7 +415,7 @@
             </div>
             <strong style="color: #fed7aa; font-size: 0.85rem; display: block; margin-top: 4px;">Representa: Agentes y Proyectos</strong>
             <p style="font-size: 0.85rem; color: #e2e8f0; margin-top: 8px;">
-              Tienen molde y receta fija. Horneas un Agente con System Prompt y Guardrails para que el equipo concilie con un solo clic sin reinventar la rueda cada lunes.
+              Tienen molde fijo. Horneás un agente con System Prompt y Guardrails y el equipo concilia con un clic, sin volver a empezar cada lunes.
             </p>
           </div>
         </div>
@@ -434,7 +434,7 @@
       </div>
       <div class="modal-scrollable-body qr-modal-body">
         <p style="color: #cbd5e1; font-size: 0.9rem;">
-          Apunta la cámara de tu teléfono a este código QR para abrir el juego de inmediato en la misma red Wi-Fi:
+          Apuntale con la cámara del celular a este QR y entrás de una:
         </p>
 
         <div class="qr-frame">
@@ -446,7 +446,7 @@
         </a>
 
         <p style="font-size: 0.78rem; color: #94a3b8;">
-          (Asegúrate de que tu celular esté conectado a la misma red Wi-Fi que este computador).
+          (Ojo: el celular tiene que estar en el mismo Wi-Fi que este computador).
         </p>
       </div>
     </div>
@@ -481,7 +481,7 @@
       </div>
       <div class="modal-scrollable-body">
         <p style="font-size: 0.88rem; color: #cbd5e1;">
-          Conecta tu API Key de Google Gemini para que las evaluaciones y las simulaciones de Claude sean 100% dinámicas en tiempo real (utilizando <code>gemini-3.8-flash</code>).
+          Poné tu API Key de Google Gemini pa' que las evaluaciones salgan en vivo (con <code>gemini-3.8-flash</code>).
         </p>
 
         <div class="form-group-field">
@@ -495,7 +495,7 @@
         </div>
 
         <p style="font-size: 0.75rem; color: #94a3b8;">
-          * Si ya la colocaste en el archivo <code>.env</code> del servidor, el juego la detecta automáticamente para todos los jugadores.
+          * Si ya la colocaste en el archivo <code>.env</code> del servidor, el juego la coge solita pa' todos.
         </p>
 
         <button id="btn-save-key" class="nav-btn primary" style="justify-content: center; padding: 10px;">

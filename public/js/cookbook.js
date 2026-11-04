@@ -146,7 +146,7 @@ class PromptCookbook {
 
     ctx.fillStyle = "#e2e8f0";
     ctx.font = "italic 18px 'Segoe UI', sans-serif";
-    ctx.fillText("La Academia Snack de Gestión de Ingresos y Recaudo otorga el presente reconocimiento a:", width / 2, 130);
+    ctx.fillText("La Academia Snack de Gestión de Ingresos, con todo el cariño paisa, le entrega este reconocimiento a:", width / 2, 130);
 
     // Nombre del alumno
     ctx.fillStyle = "#ffffff";
@@ -164,9 +164,9 @@ class PromptCookbook {
     // Texto del logro
     ctx.fillStyle = "#cbd5e1";
     ctx.font = "17px 'Segoe UI', sans-serif";
-    ctx.fillText("Por haber superado con éxito los 7 pisos del Edificio de Operaciones,", width / 2, 235);
-    ctx.fillText("domar al Monstruo de la Conciliación, ahorrar miles de M&Ms en tokens,", width / 2, 260);
-    ctx.fillText("y graduarse como:", width / 2, 285);
+    ctx.fillText("Por pasarse los 7 pisos del Edificio de Operaciones como un berraco,", width / 2, 235);
+    ctx.fillText("domar al Monstruo de la Conciliación, ahorrarse un jurgo de M&Ms en tokens,", width / 2, 260);
+    ctx.fillText("y graduarse como todo un:", width / 2, 285);
 
     // Título gracioso
     ctx.fillStyle = "#38bdf8";
@@ -186,7 +186,7 @@ class PromptCookbook {
     ctx.fillText("Cerebro de IA & Protector de Cuentas", width / 2 - 180, 470);
 
     ctx.fillText("________________________", width / 2 + 180, 430);
-    ctx.fillText("Don Saldo & El Equipo", width / 2 + 180, 450);
+    ctx.fillText("Mario & El Combo", width / 2 + 180, 450);
     ctx.fillText("Gerencia de Gestión de Ingresos", width / 2 + 180, 470);
 
     // Sello circular

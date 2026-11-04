@@ -124,7 +124,7 @@ class OfficeGame {
         h: 110,
         type: "snack_table",
         label: "Mesa del Compartir",
-        desc: "La mesa sagrada donde el equipo se reúne a compartir snacks y aprender IA.",
+        desc: "La mesa sagrada donde el combo se junta a mecatear y aprender IA.",
       },
 
       // Cafetera Corporativa
@@ -134,25 +134,36 @@ class OfficeGame {
         w: 70,
         h: 60,
         type: "coffee",
-        label: "Estación de Café",
-        desc: "Café colombiano bien cargado. El combustible oficial del cierre de mes.",
+        label: "La Greca del Tintico",
+        desc: "Tintico bien cargado. La gasolina oficial del cierre de mes.",
       },
 
-      // Escritorio Don Saldo (Jefe)
+      // Escritorio Mario (Gerente)
       {
         x: 800,
         y: 60,
         w: 110,
         h: 70,
         type: "boss_desk",
-        label: "Despacho Don Saldo",
-        desc: "Don Saldo revisa un extracto bancario con lupa y un sello de RECHAZADO.",
+        label: "Despacho de Mario",
+        desc: "Mario revisando un extracto con lupa y un sello de RECHAZADO. ¡No lo vayás a interrumpir!",
       },
 
       // Escritorios operativos
-      { x: 80, y: 200, w: 80, h: 60, type: "desk", label: "Escritorio Lina" },
+      { x: 80, y: 200, w: 80, h: 60, type: "desk", label: "Escritorio Catalina" },
       { x: 80, y: 350, w: 80, h: 60, type: "desk", label: "Escritorio Carlos" },
-      { x: 80, y: 480, w: 80, h: 60, type: "desk", label: "Escritorio Sofi" },
+      { x: 80, y: 480, w: 80, h: 60, type: "desk", label: "Escritorio Braian" },
+
+      // Estación de El Cristian (Líder de Gestión de Ingresos)
+      {
+        x: 845,
+        y: 175,
+        w: 75,
+        h: 60,
+        type: "desk",
+        label: "Estación de El Cristian",
+        desc: "Escritorio impecable con un letrero: 'NO ME HABLEN ANTES DEL TINTO'. Tiene un Excel abierto con 47 pestañas, todas en rojo. ¡Qué susto, pues!",
+      },
 
       // Impresora humeante
       {
@@ -162,7 +173,7 @@ class OfficeGame {
         h: 60,
         type: "printer",
         label: "Impresora Humeante",
-        desc: "¡Imprimiendo 400 páginas de extractos de Bancolombia que nadie va a leer!",
+        desc: "¡Ave María! Imprimiendo 400 páginas de extractos de Bancolombia que nadie va a leer.",
       },
     ];
 
@@ -170,20 +181,20 @@ class OfficeGame {
     this.npcs = [
       {
         id: "don_saldo",
-        name: "Don Saldo (Gerente)",
+        name: "Mario (Gerente)",
         area: "Gerencia de Ingresos",
         x: 750,
         y: 90,
-        dialog: "¡Muchachos! El cierre contable es a las 5:00 PM. Si aprenden a usar Claude para cruzar los bancos y armar agentes, ¡hoy nos vamos temprano a comer pizza!",
+        dialog: "¡Qué más pues, muchachos! El cierre es a las 5:00 PM. Si le cogen el tiro a Claude, nos vamos tempranito.",
         iconKey: "boss",
       },
       {
         id: "lina_concilia",
-        name: "Lina (Conciliaciones)",
+        name: "Catalina (Conciliaciones)",
         area: "Bancos & Conciliación",
         x: 180,
         y: 210,
-        dialog: "Llevaba 3 horas buscando $18 pesos de diferencia hasta que descubrí que pidiéndole a Claude con los 4 ingredientes del DeTodito me encontró el pago agrupado en 4 segundos.",
+        dialog: "¡Ave María, parce! Claude me encontró $18 pesos de diferencia en 4 segundos. Usá los 4 ingredientes, pues.",
         iconKey: "user",
       },
       {
@@ -192,17 +203,27 @@ class OfficeGame {
         area: "Cartera & Recaudos",
         x: 180,
         y: 360,
-        dialog: "Antes me gastaba 300 M&Ms mandando cartas bíblicas a los clientes. Ahora comprimo todo a CSV y Claude me redacta los correos de cobro más amables del mundo.",
+        dialog: "Vea, pegá solo lo necesario en CSV. Ahorrás M&Ms y Claude te responde mejor.",
         iconKey: "user",
       },
       {
         id: "sofi_auto",
-        name: "Sofi (Automatizaciones)",
+        name: "Braian (Automatizaciones)",
         area: "Transformación Digital",
         x: 180,
         y: 490,
-        dialog: "¡Conecta Google Drive y Gmail a Claude! Deja de descargar comprobantes a mano como en 2002. ¡Pruébalo en la Terminal 7!",
+        dialog: "¿Todavía bajando PDFs a mano, mijo? Conectá Gmail y Drive a Claude. ¡Probalo en la Terminal 7!",
         iconKey: "user",
+      },
+      {
+        id: "el_cristian",
+        name: "El Cristian (Líder de Gestión de Ingresos)",
+        badge: "El Cristian",
+        area: "Gestión de Ingresos",
+        x: 800,
+        y: 190,
+        dialog: "¡Ush, qué pereza! ¿Y vos qué hacés ahí parado? Andá pa' la terminal y nada de prompts de 3 palabras, que me da piedra. ¡Y no te comás mis M&Ms!",
+        iconKey: "boss",
       },
     ];
 
@@ -361,7 +382,7 @@ class OfficeGame {
     } else if (item.isTeammate) {
       window.appUI.showDialogue(
         `Compañero: ${item.name}`,
-        `Área: ${item.area}\nNivel actual: ${item.currentLevel}/7\n¡Está conectado en la misma sala resolviendo retos con Claude!`,
+        `Área: ${item.area}\nVa en el nivel: ${item.currentLevel}/7\n¡Está aquí en la sala camellándole a los retos con Claude!`,
         "user"
       );
     } else if (item.isFurniture) {
@@ -369,12 +390,12 @@ class OfficeGame {
         window.appUI.showSnackTableModal();
       } else if (item.type === "coffee") {
         window.appUI.showDialogue(
-          "Estación de Café Colombiano",
-          "Un buen tinto bien cargado. ¡Combustible oficial para cuadrar el cierre de mes!",
+          "La Greca del Tintico",
+          "Un tintico bien cargado, mijo. ¡Sin esto no cuadra ni el cierre ni nada!",
           "coffee"
         );
       } else {
-        window.appUI.showDialogue(item.label, item.desc || "Un mueble de oficina bien cuidado.", "table");
+        window.appUI.showDialogue(item.label, item.desc || "Un mueble de oficina bien cuidadito.", "table");
       }
     }
   }
@@ -823,7 +844,7 @@ class OfficeGame {
       this.drawVectorIcon(ctx, npc.iconKey || "user", npc.x - 2, npc.y - 2, 34, 34);
 
       // Etiqueta de nombre sin sobreescritura
-      this.drawPillBadge(ctx, npc.name.split(" ")[0], npc.x + 15, npc.y + 44, "#1e293b", "#f1f5f9");
+      this.drawPillBadge(ctx, npc.badge || npc.name.split(" ")[0], npc.x + 15, npc.y + 44, "#1e293b", "#f1f5f9");
     }
   }
 
