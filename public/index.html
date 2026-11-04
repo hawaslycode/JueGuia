@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>JueGuIA: La Odisea de Gestión de Ingresos (Edición Snack-IA)</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><circle cx='20' cy='20' r='18' fill='%23f59e0b'/><text x='20' y='27' font-family='Arial Black' font-weight='900' font-size='18' fill='%23ffffff' text-anchor='middle'>m</text></svg>" />
+</head>
+<body>
+
+  <!-- Barra Superior / HUD Principal -->
+  <header class="top-navbar">
+    <div class="brand-section">
+      <div class="game-logo" id="header-logo-icon"></div>
+      <div class="game-title">
+        <h1>JueGuIA <span class="badge-tag">Gestión de Ingresos</span></h1>
+        <span id="hud-player-name" class="subtitle">Especialista (Gestión de Ingresos)</span>
+      </div>
+    </div>
+
+    <!-- HUD de Snacks y Tokens con Iconos Vectoriales -->
+    <div class="hud-snack-bar">
+      <div class="snack-pill masmelo" title="Masmelo: El Modelo Claude (No lo quemes)">
+        <span class="inline-icon" id="hud-icon-masmelo"></span>
+        <strong id="hud-masmelos">2</strong>
+      </div>
+      <div class="snack-pill mm" title="M&Ms: Moneda de Tokens (Gasto de contexto)">
+        <span class="inline-icon" id="hud-icon-mm"></span>
+        <strong id="hud-mms">45</strong> M&Ms
+      </div>
+      <div class="snack-pill detodito" title="DeTodito: El Contexto Completo de 4 Ingredientes">
+        <span class="inline-icon" id="hud-icon-detodito"></span>
+        <strong id="hud-detodito">1</strong>
+      </div>
+      <div class="snack-pill galleta" title="Galletas: Agentes y Proyectos Horneados">
+        <span class="inline-icon" id="hud-icon-galleta"></span>
+        <strong id="hud-galletas">0</strong>
+      </div>
+      <div class="snack-pill progress" title="Niveles de Gestión de Ingresos Aprobados">
+        <span class="inline-icon" id="hud-icon-star"></span>
+        <strong id="hud-progress">0/7</strong>
+      </div>
+    </div>
+
+    <!-- Acciones Rápidas -->
+    <div class="nav-actions">
+      <select id="quick-level-select" class="nav-select">
+        <option value="">Ir a Nivel...</option>
+      </select>
+
+      <button id="btn-my-profile" class="nav-btn" title="Ver o editar mi nombre y área de trabajo">
+        👤 Mi Perfil
+      </button>
+
+      <button id="btn-teammates-table" class="nav-btn green" title="Ver a mis compañeros conectados en la mesa">
+        👥 Mesa en Vivo (<span id="teammates-count-badge">1</span>)
+      </button>
+
+      <button id="btn-meta-prompt" class="nav-btn purple" title="Ver el Prompt Maestro completo para clonar o recrear este juego con IA">
+        🤖 Prompt Maestro del Juego
+      </button>
+
+      <button id="btn-cookbook" class="nav-btn" title="Ver y descargar los prompts aprobados">
+        📖 Recetario
+      </button>
+
+      <button id="btn-snacks-info" class="nav-btn" title="Guía y significado de cada snack del compartir">
+        🍿 Snacks
+      </button>
+
+      <button id="btn-mobile-qr" class="nav-btn" title="Jugar en el celular escaneando QR">
+        📱 Celular QR
+      </button>
+
+      <button id="btn-certificate" class="nav-btn primary" title="Ver mi Certificado Oficial">
+        🎓 Certificado
+      </button>
+
+      <span id="api-status-badge" class="api-badge offline">
+        Comprobando API...
+      </span>
+
+      <button id="btn-settings" class="nav-btn" title="Configurar API Key de Gemini">
+        ⚙️
+      </button>
+
+      <button id="btn-sound-toggle" class="nav-btn" title="Activar/Silenciar Efectos de Sonido">
+        🔊
+      </button>
+    </div>
+  </header>
+
+  <!-- Contenedor Principal del Juego -->
+  <main class="main-game-layout">
+    <div class="game-screen-wrapper">
+      <canvas id="game-canvas"></canvas>
+    </div>
+
+    <!-- Indicador de Controles en PC -->
+    <div class="keyboard-hints">
+      <span>Moverse: <span class="kbd">↑</span> <span class="kbd">↓</span> <span class="kbd">←</span> <span class="kbd">→</span> o <span class="kbd">W A S D</span></span>
+      <span>Interactuar: <span class="kbd">ESPACIO</span> o <span class="kbd">ENTER</span></span>
+      <span>Cerrar Ventana: <span class="kbd">ESC</span></span>
+    </div>
+
+    <!-- Controles Táctiles para Celulares / Pantallas Táctiles -->
+    <div class="touch-controls-container">
+      <div class="dpad">
+        <button id="btn-up" class="dpad-btn" aria-label="Arriba">▲</button>
+        <button id="btn-down" class="dpad-btn" aria-label="Abajo">▼</button>
+        <button id="btn-left" class="dpad-btn" aria-label="Izquierda">◀</button>
+        <button id="btn-right" class="dpad-btn" aria-label="Derecha">▶</button>
+      </div>
+
+      <div class="touch-action-panel">
+        <button id="btn-action" class="action-btn-circle" aria-label="Acción / Interactuar">A</button>
+        <span class="action-label">INTERACTUAR</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================================
+       MODAL: ONBOARDING / REGISTRO DEL JUGADOR
+       ======================================================== -->
+  <div id="profile-modal" class="modal-backdrop">
+    <div class="modal-window" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 id="profile-modal-title">¡Bienvenido! Registra tu Jugador</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-scrollable-body">
+        <p style="font-size: 0.9rem; color: #cbd5e1;">
+          Ingresa tus datos para que tus compañeros te vean sentado en la mesa de juego y en el tablero de avance:
+        </p>
+
+        <div class="form-group-field">
+          <label>Tu Nombre Completo:</label>
+          <input type="text" id="reg-player-name" class="form-input" placeholder="Ej: Diana Morales" />
+        </div>
+
+        <div class="form-group-field">
+          <label>Área o Cargo en Gestión de Ingresos:</label>
+          <select id="reg-player-area" class="form-input" style="cursor: pointer;">
+            <option value="Gestión de Ingresos">Gestión de Ingresos</option>
+            <option value="Cartera & Cobranzas">Cartera & Cobranzas</option>
+            <option value="Conciliaciones Bancarias">Conciliaciones Bancarias</option>
+            <option value="Facturación & ERP">Facturación & ERP (SAP / Siigo / Oracle)</option>
+            <option value="Tesorería & Bancos">Tesorería & Bancos</option>
+            <option value="Contabilidad General">Contabilidad General</option>
+            <option value="Auditoría & Control">Auditoría & Control</option>
+            <option value="Transformación & TI">Transformación Digital & TI</option>
+            <option value="Comercial & Recaudos">Comercial & Recaudos</option>
+          </select>
+        </div>
+
+        <p style="font-size: 0.78rem; color: #94a3b8;">
+          * Tu avance de niveles y M&Ms ahorrados se sincronizarán en tiempo real con el resto del equipo.
+        </p>
+
+        <button id="btn-save-profile" class="nav-btn primary" style="justify-content: center; padding: 12px;">
+          Entrar al Cierre de Mes
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: MESA DE JUGADORES EN VIVO
+       ======================================================== -->
+  <div id="teammates-modal" class="modal-backdrop">
+    <div class="modal-window" style="max-width: 720px;">
+      <div class="modal-header">
+        <h3>👥 Mesa de Jugadores del Equipo en Vivo</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-scrollable-body">
+        <p style="font-size: 0.9rem; color: #94a3b8;">
+          Aquí puedes ver a todos los compañeros que están en la sala jugando desde sus computadores o celulares, su área y el piso que van superando:
+        </p>
+
+        <div id="teammates-cards-container" class="teammates-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: PROMPT MAESTRO DEL JUEGO (PARA RECREAR CON IA)
+       ======================================================== -->
+  <div id="meta-prompt-modal" class="modal-backdrop">
+    <div class="modal-window" style="max-width: 820px;">
+      <div class="modal-header">
+        <h3>🤖 Prompt Maestro para Recrear y Clonar este Juego con IA</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-scrollable-body">
+        <p style="font-size: 0.88rem; color: #cbd5e1;">
+          Copia este prompt maestro y pégalo en Google Gemini, Claude o cualquier IA para reproducir exactamente la misma arquitectura pedagógica de snacks, niveles contables, evaluador con Gemini 3.8 y modo móvil:
+        </p>
+
+        <div style="display: flex; justify-content: flex-end;">
+          <button id="btn-copy-meta-prompt" class="nav-btn primary" onclick="copyMetaPromptText(this)">
+            📋 Copiar Prompt Maestro Completo
+          </button>
+        </div>
+
+        <textarea id="meta-prompt-content" class="meta-prompt-textarea" readonly></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: LABORATORIO DE PROMPTS (NIVEL EDUCATIVO)
+       ======================================================== -->
+  <div id="level-modal" class="modal-backdrop">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div class="level-badge-row">
+          <span id="lvl-number-badge" class="level-number-badge">NIVEL 1 DE 7</span>
+          <span id="lvl-snack-tag" class="level-tag">Snack: DeTodito</span>
+          <span id="lvl-concept-tag" class="level-tag">Contexto</span>
+        </div>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+
+      <div class="modal-scrollable-body">
+        <div class="level-intro-header">
+          <h2 id="lvl-title" style="color: #fbbf24; font-size: 1.3rem;">Título del Nivel</h2>
+          <p id="lvl-subtitle" style="color: #94a3b8; font-size: 0.9rem;">Subtítulo pedagógico</p>
+        </div>
+
+        <div id="lvl-humor-intro" class="level-humor-quote">
+          Historia divertida sobre el cierre contable...
+        </div>
+
+        <div class="lesson-box">
+          <div id="lvl-lesson-body"></div>
+        </div>
+
+        <div class="case-data-box">
+          <h5 id="lvl-case-title">Datos Reales del Caso:</h5>
+          <pre id="lvl-case-data" class="case-data-text"></pre>
+        </div>
+
+        <div class="challenge-prompt-section">
+          <div id="lvl-challenge-goal" class="challenge-goal-alert">
+            Escribe un prompt que le ordene a Claude procesar estos datos...
+          </div>
+
+          <div class="detodito-live-checklist">
+            <div id="ing-rol" class="ingredient-badge">
+              <span><strong>Rol (Plátano)</strong></span>
+              <span class="badge-status">Pendiente</span>
+            </div>
+            <div id="ing-context" class="ingredient-badge">
+              <span><strong>Contexto (Chicharrón)</strong></span>
+              <span class="badge-status">Pendiente</span>
+            </div>
+            <div id="ing-steps" class="ingredient-badge">
+              <span><strong>Instrucciones (Margarita)</strong></span>
+              <span class="badge-status">Pendiente</span>
+            </div>
+            <div id="ing-format" class="ingredient-badge">
+              <span><strong>Formato (Tostacos)</strong></span>
+              <span class="badge-status">Pendiente</span>
+            </div>
+          </div>
+
+          <div class="prompt-editor-wrapper">
+            <div class="editor-toolbar">
+              <span>✍️ Redacta tu Prompt para Claude:</span>
+              <span>Gasto estimado: <strong id="live-mms-counter" class="live-mms-counter">0 M&Ms</strong></span>
+            </div>
+            <textarea
+              id="player-prompt-input"
+              class="player-prompt-textarea"
+              placeholder="Escribe aquí tu prompt aplicando los ingredientes del DeTodito... (Ej: Actúa como especialista en gestión de ingresos...)"
+            ></textarea>
+
+            <div class="prompt-actions-row">
+              <button id="btn-insert-template" class="btn-template">
+                💡 Insertar Plantilla Recomendada
+              </button>
+              <button id="btn-submit-prompt" class="btn-submit-eval">
+                🚀 Enviar a Claude (Evaluado por Gemini 3.8)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resultados de la Evaluación -->
+        <div id="evaluation-result-box" class="evaluation-result-box" style="display: none;">
+          <div class="eval-header-row">
+            <h3 id="eval-status-title" style="color: #60a5fa;">¡NIVEL EVALUADO!</h3>
+            <span id="eval-score-badge" class="score-badge approved">85/100</span>
+          </div>
+
+          <div id="eval-snack-reward" style="display: none;"></div>
+          <div id="eval-detodito-feedback"></div>
+
+          <div style="background: #1e1b4b; padding: 14px; border-radius: 8px; border-left: 4px solid #a855f7;">
+            <p style="font-size: 0.85rem; color: #e9d5ff;"><strong>Veredicto del Gran Maestro Masmelo:</strong></p>
+            <p id="eval-humor-quote" style="color: #f5d0fe; font-style: italic; margin-top: 4px;"></p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <p id="eval-token-verdict" style="font-size: 0.85rem; color: #fde047;"></p>
+            <div class="pro-tip-box">
+              <strong>Consejo Ninja para el Trabajo:</strong>
+              <p id="eval-pro-tip" style="margin-top: 4px;"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Simulación en Vivo de Claude -->
+        <div id="claude-simulation-box" class="claude-simulation-box" style="display: none;">
+          <div class="claude-sim-header">
+            <span>Respuesta Generada por Claude (Simulación en Vivo):</span>
+          </div>
+          <div id="claude-simulation-content" class="claude-sim-pre"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: RECETARIO DE PROMPTS
+       ======================================================== -->
+  <div id="cookbook-modal" class="modal-backdrop">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>📖 Recetario Maestro de Prompts (Gestión de Ingresos)</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-scrollable-body">
+        <p style="font-size: 0.9rem; color: #94a3b8;">
+          Aquí tienes la biblioteca completa de prompts listos para copiar y usar en tu Claude del día a día (para conciliaciones, tablas, correos de cobranza y agentes).
+        </p>
+
+        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+          <button id="btn-download-cookbook" class="nav-btn primary">
+            📥 Descargar Recetario Completo (.MD)
+          </button>
+        </div>
+
+        <div id="cookbook-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: MESA DE SNACKS DEL COMPARTIR
+       ======================================================== -->
+  <div id="snack-table-modal" class="modal-backdrop">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>🍿 La Gran Mesa del Compartir & Simbolismo de la IA</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-scrollable-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+          <div style="background: #2a1b3d; padding: 16px; border-radius: 10px; border: 1px solid #f472b6;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="inline-icon" id="snack-card-masmelo"></span>
+              <h4 style="color: #f472b6; font-size: 1.05rem;">El Masmelo</h4>
+            </div>
+            <strong style="color: #fbcfe8; font-size: 0.85rem; display: block; margin-top: 4px;">Representa: El Modelo de IA (Claude)</strong>
+            <p style="font-size: 0.85rem; color: #e2e8f0; margin-top: 8px;">
+              Es suave, dulce y flexible. Se amolda a cualquier tarea. Pero si le metes fuego directo con un prompt vago de 3 palabras, <strong>se quema por fuera, queda crudo por dentro y alucina pagos que no existen</strong>.
+            </p>
+          </div>
+
+          <div style="background: #2b2311; padding: 16px; border-radius: 10px; border: 1px solid #f59e0b;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="inline-icon" id="snack-card-mm"></span>
+              <h4 style="color: #f59e0b; font-size: 1.05rem;">Los M&Ms</h4>
+            </div>
+            <strong style="color: #fde68a; font-size: 0.85rem; display: block; margin-top: 4px;">Representa: Los Tokens y Memoria</strong>
+            <p style="font-size: 0.85rem; color: #e2e8f0; margin-top: 8px;">
+              Cada sílaba, número y fila vacía de Excel le cuesta M&Ms a la bolsa. Ahorra M&Ms limpiando columnas inútiles, usando CSV y evitando saludos ceremoniales eternos.
+            </p>
+          </div>
+
+          <div style="background: #1c2618; padding: 16px; border-radius: 10px; border: 1px solid #84cc16;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="inline-icon" id="snack-card-detodito"></span>
+              <h4 style="color: #a3e635; font-size: 1.05rem;">El DeTodito</h4>
+            </div>
+            <strong style="color: #d9f99d; font-size: 0.85rem; display: block; margin-top: 4px;">Representa: El Contexto Multimodal</strong>
+            <p style="font-size: 0.85rem; color: #e2e8f0; margin-top: 8px;">
+              El paquete perfecto: <strong>Plátano</strong> (Rol experto), <strong>Chicharrón</strong> (Datos del negocio y extractos), <strong>Margarita</strong> (Pasos claros) y <strong>Tostacos</strong> (Formato de tabla innegociable).
+            </p>
+          </div>
+
+          <div style="background: #2e1a12; padding: 16px; border-radius: 10px; border: 1px solid #d97706;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="inline-icon" id="snack-card-galleta"></span>
+              <h4 style="color: #fb923c; font-size: 1.05rem;">Las Galletitas</h4>
+            </div>
+            <strong style="color: #fed7aa; font-size: 0.85rem; display: block; margin-top: 4px;">Representa: Agentes y Proyectos</strong>
+            <p style="font-size: 0.85rem; color: #e2e8f0; margin-top: 8px;">
+              Tienen molde y receta fija. Horneas un Agente con System Prompt y Guardrails para que el equipo concilie con un solo clic sin reinventar la rueda cada lunes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: CELULAR QR
+       ======================================================== -->
+  <div id="qr-modal" class="modal-backdrop">
+    <div class="modal-window" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3>📱 Jugar en el Celular</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-scrollable-body qr-modal-body">
+        <p style="color: #cbd5e1; font-size: 0.9rem;">
+          Apunta la cámara de tu teléfono a este código QR para abrir el juego de inmediato en la misma red Wi-Fi:
+        </p>
+
+        <div class="qr-frame">
+          <img id="qr-code-img" src="" alt="Código QR para celular" />
+        </div>
+
+        <a id="qr-network-url" class="qr-link-url" href="#" target="_blank">
+          http://localhost:3000
+        </a>
+
+        <p style="font-size: 0.78rem; color: #94a3b8;">
+          (Asegúrate de que tu celular esté conectado a la misma red Wi-Fi que este computador).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: DIÁLOGO CON PERSONAJES
+       ======================================================== -->
+  <div id="dialogue-modal" class="modal-backdrop">
+    <div class="modal-window" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 id="dialogue-title">Conversación</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-scrollable-body">
+        <div class="dialogue-content">
+          <div id="dialogue-icon" class="dialogue-avatar"></div>
+          <div id="dialogue-body" class="dialogue-bubble"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: CONFIGURACIÓN / GEMINI API KEY
+       ======================================================== -->
+  <div id="settings-modal" class="modal-backdrop">
+    <div class="modal-window" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3>⚙️ Conexión con Gemini 3.8 API</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-scrollable-body">
+        <p style="font-size: 0.88rem; color: #cbd5e1;">
+          Conecta tu API Key de Google Gemini para que las evaluaciones y las simulaciones de Claude sean 100% dinámicas en tiempo real (utilizando <code>gemini-3.8-flash</code>).
+        </p>
+
+        <div class="form-group-field">
+          <label>API Key de Google Gemini:</label>
+          <input
+            type="password"
+            id="settings-api-key"
+            class="form-input"
+            placeholder="AIzaSy..."
+          />
+        </div>
+
+        <p style="font-size: 0.75rem; color: #94a3b8;">
+          * Si ya la colocaste en el archivo <code>.env</code> del servidor, el juego la detecta automáticamente para todos los jugadores.
+        </p>
+
+        <button id="btn-save-key" class="nav-btn primary" style="justify-content: center; padding: 10px;">
+          Guardar y Conectar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: CERTIFICADO DE GRADUACIÓN
+       ======================================================== -->
+  <div id="certificate-modal" class="modal-backdrop">
+    <div class="modal-window" style="max-width: 780px;">
+      <div class="modal-header">
+        <h3>🎓 Certificado Oficial de Maestría en IA</h3>
+        <button class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-scrollable-body certificate-preview-wrapper">
+        <div class="player-name-form">
+          <label style="font-size: 0.85rem; color: #cbd5e1; white-space: nowrap;">Tu Nombre Completo:</label>
+          <input type="text" id="player-name-input" placeholder="Ej: Diana Morales" />
+          <button onclick="window.appUI.openCertificateModal()" class="nav-btn">Actualizar</button>
+        </div>
+
+        <canvas id="certificate-canvas" width="800" height="520"></canvas>
+
+        <div style="display: flex; gap: 10px;">
+          <button id="btn-download-certificate" class="nav-btn primary">
+            📥 Descargar Certificado en Imagen (PNG)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carga de Scripts en Orden -->
+  <script src="js/icons.js"></script>
+  <script src="js/meta-prompt.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/cookbook.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    // Inicializar iconos SVG estáticos en el DOM
+    window.addEventListener("DOMContentLoaded", () => {
+      const setIcon = (id, iconKey) => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = renderIcon(iconKey);
+      };
+      setIcon("header-logo-icon", "masmelo");
+      setIcon("hud-icon-masmelo", "masmelo");
+      setIcon("hud-icon-mm", "mm");
+      setIcon("hud-icon-detodito", "detodito");
+      setIcon("hud-icon-galleta", "galleta");
+      setIcon("hud-icon-star", "star");
+      setIcon("snack-card-masmelo", "masmelo");
+      setIcon("snack-card-mm", "mm");
+      setIcon("snack-card-detodito", "detodito");
+      setIcon("snack-card-galleta", "galleta");
+    });
+
+    function copyMetaPromptText(btn) {
+      const text = document.getElementById("meta-prompt-content").value;
+      navigator.clipboard.writeText(text).then(() => {
+        const prev = btn.innerText;
+        btn.innerText = "✅ ¡Prompt Maestro Copiado!";
+        setTimeout(() => { btn.innerText = prev; }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
