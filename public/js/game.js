@@ -74,6 +74,9 @@ class OfficeGame {
     this.nearbyInteractable = null;
     this.activeModal = false;
 
+    this.logoImg = new Image();
+    this.logoImg.src = "img/gco-logo-white.png";
+
     this.initMap();
     this.bindEvents();
     this.resizeCanvas();
@@ -165,6 +168,10 @@ class OfficeGame {
         desc: "Escritorio impecable con un letrero: 'NO ME HABLEN ANTES DEL TINTO'. Tiene un Excel abierto con 47 pestañas, todas en rojo. ¡Qué susto, pues!",
       },
 
+      // Escritorios de La Juliana y Estefa
+      { x: 700, y: 505, w: 70, h: 55, type: "desk", label: "Escritorio La Juliana", desc: "Lleno de facturas organizadas por colores y una matica que se llama 'IVA'." },
+      { x: 702, y: 362, w: 60, h: 50, type: "desk", label: "Escritorio Estefa", desc: "Una calculadora gigante y un post-it que dice: 'Si no cuadra, probá sumando'." },
+
       // Impresora humeante
       {
         x: 830,
@@ -196,7 +203,8 @@ class OfficeGame {
         x: 180,
         y: 210,
         dialog: "¡Ave María, parce! Claude me encontró $18 pesos de diferencia en 4 segundos. Usá los 4 ingredientes, pues.",
-        iconKey: "user",
+        iconKey: "catalina",
+        size: 44,
       },
       {
         id: "carlos_cartera",
@@ -205,7 +213,8 @@ class OfficeGame {
         x: 180,
         y: 360,
         dialog: "Vea, pegá solo lo necesario en CSV. Ahorrás M&Ms y Claude te responde mejor.",
-        iconKey: "user",
+        iconKey: "carlos",
+        size: 44,
       },
       {
         id: "sofi_auto",
@@ -214,7 +223,8 @@ class OfficeGame {
         x: 180,
         y: 490,
         dialog: "¿Todavía bajando PDFs a mano, mijo? Conectá Gmail y Drive a Claude. ¡Probalo en la Terminal 7!",
-        iconKey: "user",
+        iconKey: "braian",
+        size: 44,
       },
       {
         id: "el_cristian",
@@ -225,6 +235,39 @@ class OfficeGame {
         y: 190,
         dialog: "¡Ush, qué pereza! ¿Y vos qué hacés ahí parado? Andá pa' la terminal y nada de prompts de 3 palabras, que me da piedra. ¡Y no te comás mis M&Ms!",
         iconKey: "cristian",
+        size: 44,
+      },
+      {
+        id: "la_juliana",
+        name: "La Juliana (Facturación)",
+        badge: "La Juliana",
+        area: "Facturación & ERP",
+        x: 650,
+        y: 520,
+        dialog: "¡Hola, mi amor! Vea, si le pedís a Claude la factura en tabla con NIT, valor e IVA, te queda lista pa'l ERP en un segundo. ¡Una nota!",
+        iconKey: "juliana",
+        size: 44,
+      },
+      {
+        id: "el_chanty",
+        name: "El Chanty (Tesorería)",
+        badge: "El Chanty",
+        area: "Tesorería & Bancos",
+        x: 175,
+        y: 62,
+        dialog: "¡Quiubo, parce! Aquí en la greca se piensa mejor. Mi truco: chat nuevo pa' cada tema, así no se te van los M&Ms. ¿Un tintico?",
+        iconKey: "chanty",
+        size: 44,
+      },
+      {
+        id: "estefa",
+        name: "Estefa (Recaudos)",
+        badge: "Estefa",
+        area: "Recaudos",
+        x: 660,
+        y: 375,
+        dialog: "¡Ay, qué más pues! Yo ya no cuadro pagos a mano: le digo a Claude 'si no cuadra, probá sumando varias facturas' y listo. ¡Andá al Piso 4!",
+        iconKey: "estefa",
         size: 44,
       },
     ];
@@ -246,8 +289,8 @@ class OfficeGame {
       { id: 2, x: 530, y: 150, type: "detodito", iconKey: "detodito", collected: false },
       { id: 3, x: 720, y: 220, type: "masmelo", iconKey: "masmelo", collected: false },
       { id: 4, x: 260, y: 310, type: "galleta", iconKey: "galleta", collected: false },
-      { id: 5, x: 670, y: 370, type: "mm", iconKey: "mm", collected: false },
-      { id: 6, x: 720, y: 420, type: "mm", iconKey: "mm", collected: false },
+      { id: 5, x: 610, y: 400, type: "mm", iconKey: "mm", collected: false },
+      { id: 6, x: 790, y: 420, type: "mm", iconKey: "mm", collected: false },
       { id: 7, x: 390, y: 520, type: "masmelo", iconKey: "masmelo", collected: false },
     ];
   }
@@ -691,101 +734,237 @@ class OfficeGame {
   }
 
   renderFloor(ctx) {
-    ctx.fillStyle = "#1e293b";
-    ctx.fillRect(0, 0, this.virtualWidth, this.virtualHeight);
-
-    const tileSize = 48;
-    ctx.strokeStyle = "#334155";
-    ctx.lineWidth = 1;
-    for (let x = 20; x < 940; x += tileSize) {
-      for (let y = 40; y < 580; y += tileSize) {
-        ctx.strokeRect(x, y, tileSize, tileSize);
+    const W = this.virtualWidth, H = this.virtualHeight;
+    // Piso tipo alfombra modular en dos tonos
+    ctx.fillStyle = "#1b2433";
+    ctx.fillRect(0, 0, W, H);
+    const t = 48;
+    for (let x = 20, i = 0; x < 940; x += t, i++) {
+      for (let y = 40, j = 0; y < 580; y += t, j++) {
+        ctx.fillStyle = (i + j) % 2 === 0 ? "#1e293b" : "#212c3f";
+        ctx.fillRect(x, y, t, t);
       }
     }
 
-    // Alfombra de la Mesa de Snacks
-    ctx.fillStyle = "#4c1d95";
-    ctx.beginPath();
-    ctx.roundRect(330, 200, 300, 170, 16);
-    ctx.fill();
-    ctx.strokeStyle = "#c084fc";
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    // Zonas del área (tapetes con rótulo)
+    const zone = (x, y, w, h, color, label, bottom = false) => {
+      ctx.fillStyle = color + "22";
+      ctx.beginPath(); ctx.roundRect(x, y, w, h, 14); ctx.fill();
+      ctx.strokeStyle = color + "66"; ctx.lineWidth = 1.5;
+      ctx.setLineDash([6, 5]); ctx.stroke(); ctx.setLineDash([]);
+      if (label) {
+        ctx.font = "bold 9px system-ui, sans-serif";
+        ctx.fillStyle = color; ctx.textAlign = "left";
+        ctx.fillText(label, x + 10, bottom ? y + h - 8 : y + 14);
+      }
+    };
+    zone(32, 48, 245, 118, "#f59e0b", "TESORERÍA · LA GRECA", true);
+    zone(32, 178, 245, 390, "#38bdf8", "CONCILIACIONES · CARTERA · AUTOMATIZACIÓN");
+    zone(638, 345, 150, 225, "#2dd4bf", "RECAUDOS · FACTURACIÓN");
+    zone(772, 150, 160, 105, "#f87171", "LIDERAZGO GI");
 
-    // Rótulo
-    ctx.fillStyle = "#e9d5ff";
-    ctx.font = "bold 13px system-ui, sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText("MESA CENTRAL DE INGRESOS & COMPARTIR", 480, 222);
+    // Tapete de la Mesa del Compartir con colores GCO
+    ctx.fillStyle = "#3b3f9e";
+    ctx.beginPath(); ctx.roundRect(330, 196, 300, 176, 18); ctx.fill();
+    ctx.strokeStyle = "#818cf8"; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = "#e0e7ff";
+    ctx.font = "bold 12px system-ui, sans-serif"; ctx.textAlign = "center";
+    ctx.fillText("MESA DEL COMPARTIR · GESTIÓN DE INGRESOS", 480, 216);
+
+    // Oficina de vidrio de la Gerencia
+    ctx.fillStyle = "rgba(125, 211, 252, 0.07)";
+    ctx.fillRect(712, 42, 226, 100);
+    ctx.strokeStyle = "rgba(125, 211, 252, 0.55)"; ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(712, 42); ctx.lineTo(712, 142); ctx.lineTo(735, 142); // puerta abierta
+    ctx.moveTo(790, 142); ctx.lineTo(938, 142);
+    ctx.stroke();
+    ctx.fillStyle = "#7dd3fc"; ctx.font = "bold 9px system-ui, sans-serif"; ctx.textAlign = "right";
+    ctx.fillText("GERENCIA FINANCIERA", 932, 137);
+
+    // Matas
+    const plant = (x, y, s = 1) => {
+      ctx.fillStyle = "#92400e";
+      ctx.beginPath(); ctx.roundRect(x - 7 * s, y, 14 * s, 11 * s, 3); ctx.fill();
+      ctx.fillStyle = "#16a34a";
+      [[-6, -2, 7], [6, -2, 7], [0, -9, 8], [-3, -14, 5], [4, -13, 5]].forEach(([dx, dy, r]) => {
+        ctx.beginPath(); ctx.arc(x + dx * s, y + dy * s, r * s, 0, Math.PI * 2); ctx.fill();
+      });
+      ctx.fillStyle = "#22c55e";
+      ctx.beginPath(); ctx.arc(x - 2 * s, y - 10 * s, 3.5 * s, 0, Math.PI * 2); ctx.fill();
+    };
+    plant(40, 560); plant(925, 545); plant(290, 172, 0.8); plant(605, 172, 0.8); plant(925, 168, 0.8);
+  }
+
+  renderNorthWall(ctx, f) {
+    // Pared
+    const g = ctx.createLinearGradient(0, f.y, 0, f.y + f.h);
+    g.addColorStop(0, "#0b1220"); g.addColorStop(1, "#111a2c");
+    ctx.fillStyle = g; ctx.fillRect(f.x, f.y, f.w, f.h);
+    ctx.fillStyle = "#334155"; ctx.fillRect(f.x, f.y + f.h - 3, f.w, 3);
+
+    // Ventanas con las montañas de Medellín
+    const windowAt = (x) => {
+      const y = 6, w = 92, h = 28;
+      const sky = ctx.createLinearGradient(0, y, 0, y + h);
+      sky.addColorStop(0, "#7dd3fc"); sky.addColorStop(1, "#fde68a");
+      ctx.fillStyle = sky; ctx.fillRect(x, y, w, h);
+      ctx.fillStyle = "#15803d";
+      ctx.beginPath(); ctx.moveTo(x, y + h);
+      ctx.quadraticCurveTo(x + 20, y + 8, x + 42, y + 18);
+      ctx.quadraticCurveTo(x + 62, y + 6, x + w, y + 16);
+      ctx.lineTo(x + w, y + h); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "#166534";
+      ctx.beginPath(); ctx.moveTo(x, y + h);
+      ctx.quadraticCurveTo(x + 35, y + 16, x + w, y + h - 4);
+      ctx.lineTo(x + w, y + h); ctx.closePath(); ctx.fill();
+      // casitas en la ladera
+      ctx.fillStyle = "#f8fafc";
+      [[18, 22], [30, 20], [60, 21], [72, 19]].forEach(([dx, dy]) => ctx.fillRect(x + dx, y + dy, 3, 2));
+      ctx.strokeStyle = "#475569"; ctx.lineWidth = 2;
+      ctx.strokeRect(x, y, w, h);
+      ctx.beginPath(); ctx.moveTo(x + w / 2, y); ctx.lineTo(x + w / 2, y + h); ctx.stroke();
+    };
+    windowAt(150); windowAt(560);
+
+    // Logo GCO en la pared
+    if (this.logoImg && this.logoImg.complete && this.logoImg.naturalWidth) {
+      const lh = 26, lw = lh * (this.logoImg.naturalWidth / this.logoImg.naturalHeight);
+      ctx.drawImage(this.logoImg, 330, 7, lw, lh);
+    }
+    ctx.fillStyle = "#c7d2fe"; ctx.font = "bold 10px system-ui, sans-serif"; ctx.textAlign = "left";
+    ctx.fillText("Gestión de Ingresos", 412, 18);
+    ctx.fillStyle = "#94a3b8"; ctx.font = "9px system-ui, sans-serif";
+    ctx.fillText("Gerencia Financiera", 412, 30);
+
+    // Pantalla de recaudo del día
+    const sx = 262, sy = 6;
+    ctx.fillStyle = "#020617"; ctx.fillRect(sx, sy, 58, 28);
+    ctx.strokeStyle = "#475569"; ctx.lineWidth = 1.5; ctx.strokeRect(sx, sy, 58, 28);
+    [7, 11, 9, 14, 16].forEach((v, i) => {
+      ctx.fillStyle = i === 4 ? "#22c55e" : "#6366f1";
+      ctx.fillRect(sx + 6 + i * 10, sy + 25 - v, 6, v);
+    });
+    ctx.fillStyle = "#86efac"; ctx.font = "bold 7px system-ui, sans-serif"; ctx.textAlign = "left";
+    ctx.fillText("RECAUDO", sx + 4, sy + 8);
+
+    // Reloj del cierre
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, "0"), mm = String(now.getMinutes()).padStart(2, "0");
+    ctx.fillStyle = "#020617"; ctx.beginPath(); ctx.roundRect(668, 8, 36, 24, 4); ctx.fill();
+    ctx.fillStyle = "#f87171"; ctx.font = "bold 10px monospace"; ctx.textAlign = "center";
+    ctx.fillText(`${hh}:${mm}`, 686, 24);
+    ctx.fillStyle = "#94a3b8"; ctx.font = "7px system-ui, sans-serif";
+    ctx.fillText("CIERRE 5PM", 686, 39);
+
+    // Tablero de metas en la oficina de gerencia
+    ctx.fillStyle = "#f8fafc"; ctx.fillRect(722, 8, 70, 26);
+    ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1; ctx.strokeRect(722, 8, 70, 26);
+    ctx.fillStyle = "#1e293b"; ctx.font = "bold 7px system-ui, sans-serif"; ctx.textAlign = "left";
+    ctx.fillText("META MES", 727, 17);
+    ctx.fillStyle = "#e2e8f0"; ctx.fillRect(727, 22, 60, 6);
+    ctx.fillStyle = "#22c55e"; ctx.fillRect(727, 22, 52, 6);
+    ctx.fillStyle = "#16a34a"; ctx.font = "bold 7px system-ui, sans-serif";
+    ctx.fillText("87%", 770, 17);
   }
 
   renderFurniture(ctx) {
+    const wood = (x, y, w, h, r = 6) => {
+      ctx.fillStyle = "#7c4a24";
+      ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fill();
+      ctx.fillStyle = "#93592b";
+      ctx.beginPath(); ctx.roundRect(x + 2, y + 2, w - 4, h - 6, r); ctx.fill();
+      ctx.strokeStyle = "#4a2a12"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.stroke();
+    };
+    const monitor = (x, y, w, h, kind) => {
+      ctx.fillStyle = "#0f172a"; ctx.fillRect(x, y, w, h);
+      ctx.fillStyle = "#334155"; ctx.fillRect(x + w / 2 - 3, y + h, 6, 4);
+      if (kind === "excel") {
+        ctx.fillStyle = "#f8fafc"; ctx.fillRect(x + 2, y + 2, w - 4, h - 4);
+        ctx.fillStyle = "#16a34a"; ctx.fillRect(x + 2, y + 2, w - 4, 3);
+        ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 0.6;
+        for (let gx = x + 6; gx < x + w - 2; gx += 6) { ctx.beginPath(); ctx.moveTo(gx, y + 5); ctx.lineTo(gx, y + h - 2); ctx.stroke(); }
+        for (let gy = y + 8; gy < y + h - 2; gy += 3.5) { ctx.beginPath(); ctx.moveTo(x + 2, gy); ctx.lineTo(x + w - 2, gy); ctx.stroke(); }
+      } else {
+        ctx.fillStyle = "#1e1b4b"; ctx.fillRect(x + 2, y + 2, w - 4, h - 4);
+        [5, 9, 6, 11].forEach((v, i) => {
+          ctx.fillStyle = ["#facc15", "#6366f1", "#38bdf8", "#22c55e"][i];
+          ctx.fillRect(x + 4 + i * ((w - 8) / 4), y + h - 3 - v, (w - 8) / 4 - 2, v);
+        });
+      }
+    };
+    const nameplate = (text, cx, y) => {
+      ctx.font = "bold 8px system-ui, sans-serif";
+      const tw = ctx.measureText(text).width + 8;
+      ctx.fillStyle = "#0f172a"; ctx.beginPath(); ctx.roundRect(cx - tw / 2, y, tw, 11, 3); ctx.fill();
+      ctx.fillStyle = "#fde68a"; ctx.textAlign = "center"; ctx.fillText(text, cx, y + 8.5);
+    };
+
     for (const f of this.furniture) {
       if (f.type === "wall") {
-        ctx.fillStyle = "#0f172a";
+        if (f.label === "Pared Norte") { this.renderNorthWall(ctx, f); continue; }
+        ctx.fillStyle = "#0b1220";
         ctx.fillRect(f.x, f.y, f.w, f.h);
-        ctx.strokeStyle = "#475569";
-        ctx.lineWidth = 2;
-        ctx.strokeRect(f.x, f.y, f.w, f.h);
-      } else if (f.type === "snack_table") {
-        // Mesa del Compartir
-        ctx.fillStyle = "#b45309";
-        ctx.beginPath();
-        ctx.roundRect(f.x, f.y, f.w, f.h, 12);
-        ctx.fill();
-        ctx.strokeStyle = "#f59e0b";
-        ctx.lineWidth = 3;
-        ctx.stroke();
-
-        // Iconos vectoriales de los 4 snacks sobre la mesa
-        this.drawVectorIcon(ctx, "masmelo", f.x + 25, f.y + 25, 30, 30);
-        this.drawVectorIcon(ctx, "detodito", f.x + 70, f.y + 25, 30, 30);
-        this.drawVectorIcon(ctx, "mm", f.x + 115, f.y + 25, 30, 30);
-        this.drawVectorIcon(ctx, "galleta", f.x + 155, f.y + 25, 30, 30);
-
-        // Bandeja de servicio
-        ctx.fillStyle = "rgba(0,0,0,0.25)";
-        ctx.beginPath();
-        ctx.roundRect(f.x + 15, f.y + 65, f.w - 30, 32, 6);
-        ctx.fill();
-
-        ctx.font = "bold 11px system-ui, sans-serif";
-        ctx.fillStyle = "#fef3c7";
-        ctx.textAlign = "center";
-        ctx.fillText("SNACKS DEL COMPARTIR", f.x + f.w / 2, f.y + 85);
-      } else if (f.type === "coffee") {
         ctx.fillStyle = "#334155";
-        ctx.fillRect(f.x, f.y, f.w, f.h);
-        ctx.strokeStyle = "#64748b";
-        ctx.strokeRect(f.x, f.y, f.w, f.h);
-        this.drawVectorIcon(ctx, "coffee", f.x + 18, f.y + 12, 36, 36);
+        if (f.label === "Pared Sur") {
+          ctx.fillRect(f.x, f.y, f.w, 2);
+          ctx.fillStyle = "#64748b"; ctx.font = "9px system-ui, sans-serif"; ctx.textAlign = "center";
+          ctx.fillText("GCO · Gerencia Financiera · Equipo de Gestión de Ingresos", 480, f.y + 14);
+        }
+      } else if (f.type === "snack_table") {
+        ctx.fillStyle = "rgba(0,0,0,0.25)";
+        ctx.beginPath(); ctx.roundRect(f.x + 4, f.y + 6, f.w, f.h, 14); ctx.fill();
+        wood(f.x, f.y, f.w, f.h, 14);
+        // mantel GCO
+        ctx.fillStyle = "#5868e8";
+        ctx.beginPath(); ctx.roundRect(f.x + 12, f.y + 14, f.w - 24, 40, 8); ctx.fill();
+        this.drawVectorIcon(ctx, "masmelo", f.x + 25, f.y + 19, 30, 30);
+        this.drawVectorIcon(ctx, "detodito", f.x + 70, f.y + 19, 30, 30);
+        this.drawVectorIcon(ctx, "mm", f.x + 115, f.y + 19, 30, 30);
+        this.drawVectorIcon(ctx, "galleta", f.x + 155, f.y + 19, 30, 30);
+        ctx.fillStyle = "rgba(0,0,0,0.3)";
+        ctx.beginPath(); ctx.roundRect(f.x + 15, f.y + 66, f.w - 30, 30, 6); ctx.fill();
+        ctx.font = "bold 11px system-ui, sans-serif"; ctx.fillStyle = "#fef3c7"; ctx.textAlign = "center";
+        ctx.fillText("¡MECATO PA'L EQUIPO!", f.x + f.w / 2, f.y + 85);
+      } else if (f.type === "coffee") {
+        wood(f.x, f.y, f.w, f.h);
+        // greca
+        ctx.fillStyle = "#cbd5e1"; ctx.beginPath(); ctx.roundRect(f.x + 10, f.y + 10, 22, 34, 4); ctx.fill();
+        ctx.fillStyle = "#94a3b8"; ctx.fillRect(f.x + 8, f.y + 8, 26, 5);
+        ctx.fillStyle = "#ef4444"; ctx.beginPath(); ctx.arc(f.x + 21, f.y + 26, 2.5, 0, Math.PI * 2); ctx.fill();
+        // pocillos
+        [[42, 30], [54, 34]].forEach(([dx, dy]) => {
+          ctx.fillStyle = "#f8fafc"; ctx.fillRect(f.x + dx, f.y + dy, 9, 9);
+          ctx.fillStyle = "#78350f"; ctx.fillRect(f.x + dx + 1, f.y + dy + 1, 7, 2);
+        });
+        nameplate("GRECA", f.x + f.w / 2, f.y + f.h - 13);
       } else if (f.type === "printer") {
-        ctx.fillStyle = "#475569";
-        ctx.fillRect(f.x, f.y, f.w, f.h);
-        this.drawVectorIcon(ctx, "printer", f.x + 18, f.y + 12, 36, 36);
+        ctx.fillStyle = "#334155"; ctx.beginPath(); ctx.roundRect(f.x, f.y, f.w, f.h, 6); ctx.fill();
+        this.drawVectorIcon(ctx, "printer", f.x + 17, f.y + 8, 36, 36);
+        ctx.fillStyle = "#f8fafc"; ctx.fillRect(f.x + 52, f.y + 40, 12, 14); ctx.fillRect(f.x + 54, f.y + 37, 12, 14);
+        // humo
+        ctx.fillStyle = "rgba(148,163,184,0.5)";
+        ctx.beginPath(); ctx.arc(f.x + 20, f.y - 4, 5, 0, Math.PI * 2); ctx.arc(f.x + 30, f.y - 10, 6, 0, Math.PI * 2); ctx.fill();
       } else if (f.type === "boss_desk") {
-        ctx.fillStyle = "#451a03";
-        ctx.beginPath();
-        ctx.roundRect(f.x, f.y, f.w, f.h, 8);
-        ctx.fill();
-        ctx.strokeStyle = "#b45309";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        ctx.fillStyle = "#0284c7";
-        ctx.fillRect(f.x + 15, f.y + 15, 45, 25);
-        this.drawVectorIcon(ctx, "boss", f.x + 70, f.y + 12, 30, 30);
+        wood(f.x, f.y, f.w, f.h, 10);
+        monitor(f.x + 12, f.y + 8, 34, 22, "bi");
+        monitor(f.x + 52, f.y + 8, 34, 22, "excel");
+        ctx.fillStyle = "#fbbf24"; ctx.fillRect(f.x + 92, f.y + 12, 10, 14); // carpeta
+        ctx.fillStyle = "#1f2937"; ctx.beginPath(); ctx.arc(f.x + 55, f.y + f.h + 2, 9, Math.PI, 0); ctx.fill();
+        nameplate("MARIO · GERENTE", f.x + f.w / 2, f.y + f.h - 16);
       } else {
-        ctx.fillStyle = "#64748b";
-        ctx.beginPath();
-        ctx.roundRect(f.x, f.y, f.w, f.h, 6);
-        ctx.fill();
-        ctx.strokeStyle = "#94a3b8";
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        ctx.fillStyle = "#0284c7";
-        ctx.fillRect(f.x + 15, f.y + 10, f.w - 30, 20);
+        // Escritorio de trabajo con doble pantalla
+        ctx.fillStyle = "rgba(0,0,0,0.25)";
+        ctx.beginPath(); ctx.roundRect(f.x + 3, f.y + 4, f.w, f.h, 6); ctx.fill();
+        wood(f.x, f.y, f.w, f.h);
+        const mw = (f.w - 18) / 2;
+        monitor(f.x + 6, f.y + 6, mw, 20, "excel");
+        monitor(f.x + 12 + mw, f.y + 6, mw, 20, "bi");
+        ctx.fillStyle = "#e2e8f0"; ctx.fillRect(f.x + f.w / 2 - 12, f.y + 32, 24, 5); // teclado
+        ctx.fillStyle = "#475569"; ctx.beginPath(); ctx.arc(f.x + f.w + 6, f.y + f.h / 2, 8, 0, Math.PI * 2); ctx.fill(); // silla
+        const who = (f.label || "").replace(/^(Escritorio|Estación de)\s+/i, "");
+        nameplate(who, f.x + f.w / 2, f.y + f.h - 13);
       }
     }
   }

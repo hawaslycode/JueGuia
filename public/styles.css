@@ -1364,3 +1364,9 @@ body {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* Logo GCO */
+.gco-logo-header { height: 26px; width: auto; display: block; flex-shrink: 0; }
+.gco-divider { width: 1px; height: 30px; background: rgba(148, 163, 184, 0.4); flex-shrink: 0; }
+.gco-logo-modal { height: 20px; width: auto; vertical-align: -3px; margin-right: 6px; }
+@media (max-width: 700px) { .gco-logo-header { height: 18px; } .gco-divider { height: 22px; } }

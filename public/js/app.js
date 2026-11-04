@@ -209,7 +209,7 @@ class AppUI {
 
     const titleEl = document.getElementById("profile-modal-title");
     if (titleEl) {
-      titleEl.innerText = isOnboarding ? "¡Bienvenido! Registra tu Jugador" : "Editar Mi Perfil";
+      titleEl.innerHTML = '<img src="img/gco-logo.png" alt="GCO" class="gco-logo-modal" /> ' + (isOnboarding ? "¡Qué más pues! Registrate, parce" : "Editá tu perfil");
     }
 
     document.getElementById("btn-save-profile").onclick = () => {
