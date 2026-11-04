@@ -270,6 +270,17 @@ class OfficeGame {
         iconKey: "estefa",
         size: 44,
       },
+      {
+        id: "yano",
+        name: "Yano \"La Coleta\" (Gestión de Ingresos)",
+        badge: "Yano",
+        area: "Gestión de Ingresos",
+        x: 878,
+        y: 256,
+        dialog: "¡Ey, qué más pues! Yo soy la que le baja la piedra a El Cristian. Mi truco: cuando Claude te responda, pedile 'revisá tu respuesta y decime qué podría estar mal'. ¡Así no se te cuela ni un peso!",
+        iconKey: "yano",
+        size: 44,
+      },
     ];
 
     // 3. Las 7 Terminales de los Niveles
@@ -761,7 +772,7 @@ class OfficeGame {
     zone(32, 48, 245, 118, "#f59e0b", "TESORERÍA · LA GRECA", true);
     zone(32, 178, 245, 390, "#38bdf8", "CONCILIACIONES · CARTERA · AUTOMATIZACIÓN");
     zone(638, 345, 150, 225, "#2dd4bf", "RECAUDOS · FACTURACIÓN");
-    zone(772, 150, 160, 105, "#f87171", "LIDERAZGO GI");
+    zone(772, 150, 160, 152, "#f87171", "LIDERAZGO GI");
 
     // Tapete de la Mesa del Compartir con colores GCO
     ctx.fillStyle = "#3b3f9e";

@@ -267,6 +267,23 @@ const ICONS = {
     </svg>
   `,
 
+  yano: `
+    <svg viewBox="0 0 40 40" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="27" cy="5" r="2.6" fill="#111111" stroke="#3f3f46" stroke-width="0.5"/><circle cx="30" cy="3.5" r="2.6" fill="#111111" stroke="#3f3f46" stroke-width="0.5"/><circle cx="32.5" cy="5.5" r="2.6" fill="#111111" stroke="#3f3f46" stroke-width="0.5"/><circle cx="31" cy="8.5" r="2.6" fill="#111111" stroke="#3f3f46" stroke-width="0.5"/><circle cx="33.5" cy="9" r="2.6" fill="#111111" stroke="#3f3f46" stroke-width="0.5"/><circle cx="29" cy="7" r="2.6" fill="#111111" stroke="#3f3f46" stroke-width="0.5"/>
+      <path d="M7 38 C7 28 12 25 20 25 C28 25 33 28 33 38 Z" fill="#eab308"/><path d="M16.5 25 L20 29.5 L23.5 25 Z" fill="#fef9c3"/>
+      <ellipse cx="20" cy="15" rx="8" ry="8.5" fill="#c68c53"/>
+      <circle cx="12.3" cy="12.5" r="2.5" fill="#111111" stroke="#3f3f46" stroke-width="0.5"/><circle cx="12.8" cy="9" r="2.5" fill="#111111" stroke="#3f3f46" stroke-width="0.5"/><circle cx="15" cy="6.6" r="2.5" fill="#111111" stroke="#3f3f46" stroke-width="0.5"/><circle cx="18" cy="5.4" r="2.5" fill="#111111" stroke="#3f3f46" stroke-width="0.5"/><circle cx="21.5" cy="5.3" r="2.5" fill="#111111" stroke="#3f3f46" stroke-width="0.5"/><circle cx="24.8" cy="6.3" r="2.5" fill="#111111" stroke="#3f3f46" stroke-width="0.5"/><circle cx="27.2" cy="8.8" r="2.5" fill="#111111" stroke="#3f3f46" stroke-width="0.5"/><circle cx="27.8" cy="12.3" r="2.5" fill="#111111" stroke="#3f3f46" stroke-width="0.5"/>
+      <path d="M24.5 6 L27 5" stroke="#f472b6" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="16.8" cy="15" r="1" fill="#0f172a"/><circle cx="23.2" cy="15" r="1" fill="#0f172a"/>
+      <path d="M15.6 13.6 L15 12.8 M24.4 13.6 L25 12.8" stroke="#0f172a" stroke-width="0.8" stroke-linecap="round"/>
+      <circle cx="14.6" cy="18" r="1.2" fill="#fb7185" opacity="0.45"/><circle cx="25.4" cy="18" r="1.2" fill="#fb7185" opacity="0.45"/>
+      <path d="M16.6 18.8 Q20 22.2 23.4 18.8 Z" fill="#7f1d1d"/>
+      <circle cx="12.2" cy="18.5" r="1" fill="#facc15"/><circle cx="27.8" cy="18.5" r="1" fill="#facc15"/>
+      <rect x="24.5" y="28" width="9" height="9" rx="1.2" fill="#1e293b" stroke="#64748b" stroke-width="0.8"/>
+      <path d="M26 35 L28 32.5 L29.8 33.8 L32 30" stroke="#22c55e" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  `,
+
   user: `
     <svg viewBox="0 0 40 40" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="20" cy="14" r="7" fill="#60a5fa"/>
