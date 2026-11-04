@@ -1113,7 +1113,7 @@ body {
 }
 
 /* ========================================================
-   PANTALLA DE ORIENTACIÓN VERTICAL PARA CELULARES
+   PANTALLA DE ORIENTACIÓN HORIZONTAL PARA CELULARES
    ======================================================== */
 .rotate-overlay {
   display: none;
@@ -1132,8 +1132,8 @@ body {
   background: #1e293b;
   border: 2px solid #f59e0b;
   border-radius: 16px;
-  padding: 30px 24px;
-  max-width: 380px;
+  padding: 26px 20px;
+  max-width: 360px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1142,24 +1142,24 @@ body {
 }
 
 .rotate-phone-icon {
-  font-size: 52px;
-  animation: rotateIconAnim 2s infinite ease-in-out;
+  font-size: 48px;
+  animation: rotateIconAnim 2.2s infinite ease-in-out;
 }
 
 @keyframes rotateIconAnim {
   0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(-90deg); }
+  50% { transform: rotate(90deg); }
 }
 
 .rotate-card h2 {
   color: #fbbf24;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   line-height: 1.3;
 }
 
 .rotate-card p {
   color: #cbd5e1;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   line-height: 1.5;
 }
 
@@ -1170,10 +1170,11 @@ body {
   padding: 4px 12px;
   border-radius: 12px;
   border: 1px solid #1e3a8a;
+  font-weight: 700;
 }
 
-/* Solo se activa en celulares / tablets cuando se giran a horizontal */
-@media (max-width: 950px) and (orientation: landscape) and (max-height: 550px) {
+/* Se activa en celulares / tablets cuando están en vertical (portrait) para pedir horizontal */
+@media (max-width: 900px) and (orientation: portrait) {
   .rotate-overlay {
     display: flex;
   }
@@ -1183,16 +1184,16 @@ body {
 .floating-mobile-hud-btn {
   display: none;
   position: fixed;
-  top: 12px;
-  right: 12px;
+  top: 10px;
+  right: 14px;
   z-index: 95;
   background: rgba(17, 24, 39, 0.85);
   backdrop-filter: blur(10px);
   border: 1.5px solid #4b5563;
   color: #fbbf24;
   border-radius: 24px;
-  padding: 8px 14px;
-  font-size: 0.82rem;
+  padding: 6px 12px;
+  font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
   align-items: center;
@@ -1207,9 +1208,9 @@ body {
 }
 
 /* ========================================================
-   AJUSTES RESPONSIVE Y MODO ZEN LIBRE PARA CELULARES
+   AJUSTES RESPONSIVE EN MODO HORIZONTAL (ESTILO CONSOLA)
    ======================================================== */
-@media (max-width: 860px) {
+@media (max-width: 950px) {
   .floating-mobile-hud-btn {
     display: flex;
   }
@@ -1220,13 +1221,12 @@ body {
     left: 0;
     right: 0;
     z-index: 80;
-    padding: 8px 12px;
-    gap: 8px;
+    padding: 6px 12px;
+    gap: 6px;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
     box-shadow: 0 10px 25px rgba(0,0,0,0.7);
   }
 
-  /* Cuando el usuario se mueve o toca la pantalla, se oculta la barra superior para libertad total */
   body.hud-hidden .top-navbar {
     transform: translateY(-115%);
     opacity: 0;
@@ -1234,29 +1234,24 @@ body {
   }
 
   .game-title h1 {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .hud-snack-bar {
-    width: 100%;
-    justify-content: space-around;
     padding: 4px 8px;
     gap: 6px;
   }
 
   .nav-actions {
-    width: 100%;
-    justify-content: space-between;
-    overflow-x: auto;
-    padding-bottom: 4px;
+    gap: 6px;
   }
 
   .nav-btn {
-    font-size: 0.78rem;
-    padding: 5px 8px;
+    font-size: 0.75rem;
+    padding: 4px 8px;
   }
 
-  /* Tablero a pantalla completa en modo vertical */
+  /* Modo Pantalla Completa Panorámica */
   .main-game-layout {
     width: 100vw;
     height: 100vh;
@@ -1279,11 +1274,11 @@ body {
     position: relative;
   }
 
-  /* Controles flotantes transparentes que no estorban el tablero */
+  /* Controles en esquinas: Pulgar Izquierdo (D-Pad) y Pulgar Derecho (Acción A) */
   .touch-controls-container {
     display: flex !important;
     position: absolute;
-    bottom: 15px;
+    bottom: 10px;
     left: 0;
     right: 0;
     background: transparent;
@@ -1294,16 +1289,18 @@ body {
     z-index: 40;
     pointer-events: none;
     backdrop-filter: none;
+    justify-content: space-between;
+    align-items: flex-end;
   }
 
   .dpad {
     pointer-events: auto;
-    width: 135px;
-    height: 135px;
+    width: 125px;
+    height: 125px;
     background: rgba(15, 23, 42, 0.45);
     backdrop-filter: blur(6px);
     border-radius: 50%;
-    border: 1.5px solid rgba(148, 163, 184, 0.3);
+    border: 1.5px solid rgba(148, 163, 184, 0.35);
     opacity: 0.85;
     transition: opacity 0.2s;
   }
@@ -1313,19 +1310,27 @@ body {
   }
 
   .dpad-btn {
+    width: 40px;
+    height: 40px;
     background: rgba(30, 41, 59, 0.7);
     border: 1.5px solid rgba(148, 163, 184, 0.4);
-    border-radius: 10px;
-    font-size: 18px;
+    border-radius: 8px;
+    font-size: 16px;
   }
+
+  #btn-up { top: 0; left: 42px; }
+  #btn-down { bottom: 0; left: 42px; }
+  #btn-left { top: 42px; left: 0; }
+  #btn-right { top: 42px; right: 0; }
 
   .touch-action-panel {
     pointer-events: auto;
+    margin-bottom: 6px;
   }
 
   .action-btn-circle {
-    width: 74px;
-    height: 74px;
+    width: 68px;
+    height: 68px;
     opacity: 0.88;
     box-shadow: 0 8px 18px rgba(245, 158, 11, 0.45);
     transition: opacity 0.2s;
@@ -1339,20 +1344,23 @@ body {
     display: none;
   }
 
+  /* Modales optimizados para pantallas horizontales */
   .modal-window {
-    max-height: 95vh;
+    max-height: 94vh;
+    max-width: 94vw;
   }
 
   .modal-scrollable-body {
-    padding: 14px;
-    gap: 14px;
+    padding: 12px;
+    gap: 12px;
+    max-height: calc(94vh - 60px);
   }
 
   .detodito-live-checklist {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .detodito-feedback-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 }

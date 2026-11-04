@@ -95,18 +95,16 @@ class OfficeGame {
     this.canvas.width = rect.width * dpr;
     this.canvas.height = rect.height * dpr;
 
-    // En pantallas verticales (móviles), escala uniforme manteniendo el aspecto sin deformar
-    if (rect.height > rect.width) {
-      this.scaleX = (rect.width * dpr) / this.virtualWidth;
-      this.scaleY = this.scaleX;
-      this.offsetX = 0;
-      this.offsetY = Math.max(0, ((rect.height * dpr) - (this.virtualHeight * this.scaleY)) / 2);
-    } else {
-      this.scaleX = (rect.width * dpr) / this.virtualWidth;
-      this.scaleY = (rect.height * dpr) / this.virtualHeight;
-      this.offsetX = 0;
-      this.offsetY = 0;
-    }
+    // Escala uniforme panorámica para modo horizontal en móviles y PC
+    const scale = Math.min(
+      (rect.width * dpr) / this.virtualWidth,
+      (rect.height * dpr) / this.virtualHeight
+    );
+
+    this.scaleX = scale;
+    this.scaleY = scale;
+    this.offsetX = Math.max(0, ((rect.width * dpr) - (this.virtualWidth * scale)) / 2);
+    this.offsetY = Math.max(0, ((rect.height * dpr) - (this.virtualHeight * scale)) / 2);
   }
 
   initMap() {
