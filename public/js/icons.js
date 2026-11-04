@@ -116,6 +116,71 @@ const ICONS = {
     </svg>
   `,
 
+  // Personajes especiales
+  cristian: `
+    <svg viewBox="0 0 40 40" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Cuerpo: camisa gris con chaleco -->
+      <path d="M7 38 C7 28 12 25 20 25 C28 25 33 28 33 38 Z" fill="#475569"/>
+      <path d="M16 25 L20 31 L24 25 Z" fill="#e2e8f0"/>
+      <!-- Brazos cruzados -->
+      <rect x="9" y="29" width="22" height="5" rx="2.5" fill="#334155"/>
+      <rect x="11" y="31" width="18" height="4" rx="2" fill="#1e293b"/>
+      <circle cx="10.5" cy="31.5" r="2" fill="#e0a77a"/>
+      <circle cx="29.5" cy="31.5" r="2" fill="#e0a77a"/>
+      <!-- Cabeza -->
+      <ellipse cx="20" cy="15" rx="8" ry="8.5" fill="#e0a77a"/>
+      <!-- Pelo corto oscuro -->
+      <path d="M12 13 C12 6 16 5 20 5 C25 5 28 7 28 13 C26 10 23 9.5 20 9.5 C17 9.5 14 10 12 13 Z" fill="#292524"/>
+      <!-- Cejas en V (bravo) -->
+      <path d="M14.5 11.8 L18.5 13.6" stroke="#1c1917" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M25.5 11.8 L21.5 13.6" stroke="#1c1917" stroke-width="1.8" stroke-linecap="round"/>
+      <!-- Ojos entrecerrados -->
+      <path d="M15.5 15.3 L18 15.3" stroke="#1c1917" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M22 15.3 L24.5 15.3" stroke="#1c1917" stroke-width="1.6" stroke-linecap="round"/>
+      <!-- Boca en trompa -->
+      <path d="M16.5 20.5 Q20 17.8 23.5 20.5" stroke="#7f1d1d" stroke-width="1.6" stroke-linecap="round"/>
+      <!-- Mejillas rojas de la piedra -->
+      <circle cx="14.5" cy="18" r="1.4" fill="#f87171" opacity="0.6"/>
+      <circle cx="25.5" cy="18" r="1.4" fill="#f87171" opacity="0.6"/>
+      <!-- Vena de rabia -->
+      <path d="M31 4 L33 6 M35 4 L33 6 M33 6 L33 8.5 M33 6 L30.5 6 M33 6 L35.5 6" stroke="#ef4444" stroke-width="1.6" stroke-linecap="round"/>
+      <!-- Nubecita de humo -->
+      <circle cx="7" cy="7" r="2" fill="#94a3b8" opacity="0.8"/>
+      <circle cx="5" cy="4" r="1.3" fill="#94a3b8" opacity="0.6"/>
+    </svg>
+  `,
+
+  mario: `
+    <svg viewBox="0 0 40 40" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Traje azul oscuro -->
+      <path d="M7 38 C7 28 12 25 20 25 C28 25 33 28 33 38 Z" fill="#1e3a8a"/>
+      <!-- Camisa y solapas -->
+      <path d="M16 25 L20 32 L24 25 Z" fill="#e0f2fe"/>
+      <path d="M16 25 L18.5 33 L14 29 Z" fill="#172554"/>
+      <path d="M24 25 L21.5 33 L26 29 Z" fill="#172554"/>
+      <!-- Corbata dorada -->
+      <polygon points="19,26.5 21,26.5 21.6,33 20,35 18.4,33" fill="#f59e0b"/>
+      <!-- Carpeta con informe -->
+      <rect x="25" y="29" width="7" height="8" rx="1" fill="#f8fafc" stroke="#64748b" stroke-width="1"/>
+      <path d="M26.5 32 L30.5 32 M26.5 34 L29.5 34" stroke="#22c55e" stroke-width="1" stroke-linecap="round"/>
+      <!-- Cabeza -->
+      <ellipse cx="20" cy="15" rx="8" ry="8.5" fill="#f1c27d"/>
+      <!-- Pelo canoso a los lados, entradas arriba -->
+      <path d="M12 15 C11.5 9 14 6.5 17 6 C15 8 14.5 11 14.5 14 Z" fill="#cbd5e1"/>
+      <path d="M28 15 C28.5 9 26 6.5 23 6 C25 8 25.5 11 25.5 14 Z" fill="#cbd5e1"/>
+      <path d="M17 6 C19 5.3 21 5.3 23 6 C21 6.8 19 6.8 17 6 Z" fill="#cbd5e1"/>
+      <!-- Gafas -->
+      <rect x="13.8" y="12.6" width="5.2" height="4.2" rx="1.6" stroke="#0f172a" stroke-width="1.2" fill="#e0f2fe" fill-opacity="0.4"/>
+      <rect x="21" y="12.6" width="5.2" height="4.2" rx="1.6" stroke="#0f172a" stroke-width="1.2" fill="#e0f2fe" fill-opacity="0.4"/>
+      <path d="M19 14.4 L21 14.4" stroke="#0f172a" stroke-width="1.1"/>
+      <!-- Ojos -->
+      <circle cx="16.4" cy="14.8" r="0.9" fill="#0f172a"/>
+      <circle cx="23.6" cy="14.8" r="0.9" fill="#0f172a"/>
+      <!-- Sonrisa amable -->
+      <path d="M16.5 19 Q20 22.5 23.5 19" stroke="#7c2d12" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  `,
+
   user: `
     <svg viewBox="0 0 40 40" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="20" cy="14" r="7" fill="#60a5fa"/>

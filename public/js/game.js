@@ -186,7 +186,8 @@ class OfficeGame {
         x: 750,
         y: 90,
         dialog: "¡Qué más pues, muchachos! El cierre es a las 5:00 PM. Si le cogen el tiro a Claude, nos vamos tempranito.",
-        iconKey: "boss",
+        iconKey: "mario",
+        size: 44,
       },
       {
         id: "lina_concilia",
@@ -223,7 +224,8 @@ class OfficeGame {
         x: 800,
         y: 190,
         dialog: "¡Ush, qué pereza! ¿Y vos qué hacés ahí parado? Andá pa' la terminal y nada de prompts de 3 palabras, que me da piedra. ¡Y no te comás mis M&Ms!",
-        iconKey: "boss",
+        iconKey: "cristian",
+        size: 44,
       },
     ];
 
@@ -841,7 +843,9 @@ class OfficeGame {
       ctx.ellipse(npc.x + 15, npc.y + 34, 12, 5, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      this.drawVectorIcon(ctx, npc.iconKey || "user", npc.x - 2, npc.y - 2, 34, 34);
+      const sz = npc.size || 34;
+      const off = (sz - 30) / 2;
+      this.drawVectorIcon(ctx, npc.iconKey || "user", npc.x - off, npc.y + 34 - sz, sz, sz);
 
       // Etiqueta de nombre sin sobreescritura
       this.drawPillBadge(ctx, npc.badge || npc.name.split(" ")[0], npc.x + 15, npc.y + 44, "#1e293b", "#f1f5f9");

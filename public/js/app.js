@@ -272,6 +272,13 @@ class AppUI {
       }
     } catch (e) {
       console.warn("No se pudo obtener información de red:", e);
+      const qrUrl = document.getElementById("qr-network-url");
+      const qrImg = document.getElementById("qr-code-img");
+      if (qrImg) qrImg.style.display = "none";
+      if (qrUrl) {
+        qrUrl.innerText = "⚠️ El servidor no responde. Abrí el juego con 'npm start' y entrá por http://localhost:3000";
+        qrUrl.removeAttribute("href");
+      }
     }
   }
 
